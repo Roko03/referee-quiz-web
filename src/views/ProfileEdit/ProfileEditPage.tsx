@@ -21,6 +21,13 @@ import Layout from '@/components/Layout';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/valtio/auth';
 
+interface ProfileData {
+  username: string;
+  first_name: string | null;
+  last_name: string | null;
+  avatar_url: string | null;
+}
+
 interface ProfileFormData {
   username: string;
   firstName: string;
@@ -50,11 +57,13 @@ const ProfileEditPage = () => {
     }
 
     const fetchProfile = async () => {
-      const { data } = await supabase
+      const { data: profileData } = await supabase
         .from('profiles')
         .select('username, first_name, last_name, avatar_url')
         .eq('id', user.id)
         .single();
+
+      const data = profileData as ProfileData | null;
 
       if (data) {
         setFormData({
