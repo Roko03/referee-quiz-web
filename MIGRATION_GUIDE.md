@@ -70,7 +70,11 @@ All pages from `src/pages/` in Lovable project need migration to Next.js App Rou
 
 | Page | Route | Status | Notes |
 |------|-------|--------|-------|
-| Index.tsx | `/` | ⏳ Pending | Home page with categories |
+| Index.tsx | `/` | ✅ Complete | Home page with categories |
+| Leaderboard.tsx | `/leaderboard` | ✅ Complete | Global leaderboard |
+| Privacy.tsx | `/privacy` | ✅ Complete | MDX page |
+| Terms.tsx | `/terms` | ✅ Complete | MDX page |
+| NotFound.tsx | `/not-found` | ✅ Complete | Enhanced 404 page |
 | Auth.tsx | `/auth` | ⏳ Pending | Sign up / Sign in page |
 | QuizListing.tsx | `/quizzes/[categoryName]` | ⏳ Pending | Dynamic route |
 | CustomQuiz.tsx | `/quizzes/custom` | ⏳ Pending | Custom quiz builder |
@@ -78,12 +82,8 @@ All pages from `src/pages/` in Lovable project need migration to Next.js App Rou
 | QuizReview.tsx | `/review/[id]` | ⏳ Pending | Quiz results review |
 | QuizHistory.tsx | `/profile/history` | ⏳ Pending | User quiz history |
 | ProfileEdit.tsx | `/profile/edit` | ⏳ Pending | Edit user profile |
-| Leaderboard.tsx | `/leaderboard` | ⏳ Pending | Global leaderboard |
 | AdminUsers.tsx | `/admin/users` | ⏳ Pending | Admin: User management |
 | AdminQuestions.tsx | `/admin/questions` | ⏳ Pending | Admin: Question management |
-| Privacy.tsx | `/privacy` | ⏳ Pending | Convert to MDX |
-| Terms.tsx | `/terms` | ⏳ Pending | Convert to MDX |
-| NotFound.tsx | `/not-found` | ⏳ Pending | 404 page |
 
 ---
 
@@ -278,5 +278,5 @@ From Lovable project (`/tmp/lovable-code/rules-referee-rhythm-main/`):
 
 ---
 
-**Last Updated**: 2025-11-16  
-**Migration Progress**: ~40% (Infrastructure complete, pages pending)
+**Last Updated**: 2025-11-16
+**Migration Progress**: ~55% (Infrastructure + 5 pages complete, 9 complex pages pending)
