@@ -8,7 +8,6 @@ import {
   Box,
   Typography,
   TextField,
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -64,6 +63,7 @@ const AdminUsersPage = () => {
 
   const fetchUsers = async () => {
     setLoading(true);
+
     const { data: profilesData } = await supabase
       .from('profiles')
       .select('*')
@@ -86,6 +86,7 @@ const AdminUsersPage = () => {
       setUsers(usersWithRoles);
       setFilteredUsers(usersWithRoles);
     }
+
     setLoading(false);
   };
 
@@ -102,6 +103,7 @@ const AdminUsersPage = () => {
           || u.first_name?.toLowerCase().includes(search.toLowerCase())
           || u.last_name?.toLowerCase().includes(search.toLowerCase()),
       );
+
       setFilteredUsers(filtered);
     } else {
       setFilteredUsers(users);
@@ -112,6 +114,7 @@ const AdminUsersPage = () => {
     if (usr.first_name && usr.last_name) {
       return `${usr.first_name[0]}${usr.last_name[0]}`.toUpperCase();
     }
+
     return usr.username.substring(0, 2).toUpperCase();
   };
 
@@ -119,6 +122,7 @@ const AdminUsersPage = () => {
     if (usr.first_name && usr.last_name) {
       return `${usr.first_name} ${usr.last_name}`;
     }
+
     return usr.username;
   };
 
@@ -198,9 +202,9 @@ const AdminUsersPage = () => {
                         <TableCell>{usr.username}</TableCell>
                         <TableCell>
                           {usr.user_roles.length > 0 ? (
-                            usr.user_roles.map((role, idx) => (
+                            usr.user_roles.map((role) => (
                               <Chip
-                                key={idx}
+                                key={`${usr.id}-${role.role}`}
                                 label={role.role}
                                 size="small"
                                 color={role.role === 'admin' ? 'error' : 'default'}

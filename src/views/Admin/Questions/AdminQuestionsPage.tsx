@@ -73,6 +73,7 @@ const AdminQuestionsPage = () => {
 
   const fetchQuestions = async () => {
     setLoading(true);
+
     const { data } = await supabase
       .from('questions')
       .select(`
@@ -88,6 +89,7 @@ const AdminQuestionsPage = () => {
       setQuestions(questionsData);
       setFilteredQuestions(questionsData);
     }
+
     setLoading(false);
   };
 
