@@ -172,7 +172,7 @@ const AdminUsersPage = () => {
           first_name: userData.first_name,
           last_name: userData.last_name,
           phone: userData.phone,
-        })
+        } as any)
         .eq('id', selectedUser.id);
 
       if (profileError) throw profileError;
@@ -186,7 +186,7 @@ const AdminUsersPage = () => {
         await supabase.from('user_roles').insert({
           user_id: selectedUser.id,
           role: userData.role,
-        });
+        } as any);
       }
     }
 

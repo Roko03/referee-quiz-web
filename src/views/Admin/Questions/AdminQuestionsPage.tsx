@@ -167,7 +167,7 @@ const AdminQuestionsPage = () => {
         .insert({
           text: questionData.text,
           category_id: questionData.category_id,
-        })
+        } as any)
         .select()
         .single();
 
@@ -184,7 +184,7 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
-      await supabase.from('answers').insert(answersToInsert);
+      await supabase.from('answers').insert(answersToInsert as any);
     } else if (modalMode === 'edit' && selectedQuestion) {
       // Update question
       await supabase
@@ -192,7 +192,7 @@ const AdminQuestionsPage = () => {
         .update({
           text: questionData.text,
           category_id: questionData.category_id,
-        })
+        } as any)
         .eq('id', selectedQuestion.id);
 
       // Delete old answers
@@ -207,7 +207,7 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
-      await supabase.from('answers').insert(answersToInsert);
+      await supabase.from('answers').insert(answersToInsert as any);
     }
 
     // Refresh questions list
