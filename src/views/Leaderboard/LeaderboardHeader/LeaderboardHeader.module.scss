@@ -1,0 +1,20 @@
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, hsl(142, 76%, 36%), hsl(142, 76%, 56%));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.title {
+  font-weight: 700;
+  margin-bottom: 1rem;
+}

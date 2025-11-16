@@ -3,6 +3,8 @@ import React from 'react';
 import { Box, Card, CardContent, Typography, Avatar, Divider } from '@mui/material';
 import { EmojiEvents, WorkspacePremium, Stars } from '@mui/icons-material';
 
+import styles from './LeaderboardList.module.scss';
+
 interface LeaderboardEntry {
   username: string;
   totalQuizzes: number;
@@ -35,49 +37,22 @@ const getMedalIcon = (index: number) => {
 };
 
 const LeaderboardList = ({ entries }: LeaderboardListProps) => (
-  <Card
-    sx={{
-      boxShadow: '0 10px 40px -10px rgba(0, 0, 0, 0.5)',
-      background: 'linear-gradient(180deg, hsl(220, 24%, 9%), hsl(220, 24%, 7%))',
-    }}
-  >
+  <Card className={styles.card}>
     <CardContent sx={{ p: 3 }}>
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
+      <Typography variant="h6" className={styles.cardTitle}>
         Top 20 Players
       </Typography>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Box className={styles.list}>
         {entries.map((entry, index) => (
           <Box key={entry.username}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-                p: 2,
-                borderRadius: 2,
-                bgcolor: index < 3 ? 'rgba(142, 76%, 45%, 0.1)' : 'rgba(220, 20%, 14%, 0.3)',
-                border: index < 3 ? '1px solid rgba(142, 76%, 45%, 0.2)' : 'none',
-              }}
-            >
-              <Box sx={{ width: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {getMedalIcon(index)}
-              </Box>
+            <Box className={`${styles.entry} ${index < 3 ? styles.topThree : ''}`}>
+              <Box className={styles.rank}>{getMedalIcon(index)}</Box>
 
-              <Avatar
-                sx={{
-                  width: 40,
-                  height: 40,
-                  background: 'linear-gradient(135deg, hsl(142, 76%, 36%), hsl(142, 76%, 56%))',
-                  color: 'hsl(220, 26%, 6%)',
-                  fontWeight: 600,
-                }}
-              >
-                {entry.username.substring(0, 2).toUpperCase()}
-              </Avatar>
+              <Avatar className={styles.avatar}>{entry.username.substring(0, 2).toUpperCase()}</Avatar>
 
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="body1" sx={{ fontWeight: 600 }}>
+              <Box className={styles.userInfo}>
+                <Typography variant="body1" className={styles.username}>
                   {entry.username}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
@@ -85,8 +60,8 @@ const LeaderboardList = ({ entries }: LeaderboardListProps) => (
                 </Typography>
               </Box>
 
-              <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="h5" color="primary" sx={{ fontWeight: 700 }}>
+              <Box className={styles.stats}>
+                <Typography variant="h5" color="primary" className={styles.score}>
                   {entry.averageScore}%
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
@@ -99,7 +74,7 @@ const LeaderboardList = ({ entries }: LeaderboardListProps) => (
         ))}
 
         {entries.length === 0 && (
-          <Box sx={{ textAlign: 'center', py: 6 }}>
+          <Box className={styles.emptyState}>
             <Typography variant="body1" color="text.secondary">
               No quiz attempts yet. Be the first to take a quiz!
             </Typography>
