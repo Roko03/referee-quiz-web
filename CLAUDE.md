@@ -78,7 +78,9 @@ ComponentName/
 
 **Example `index.ts`:**
 ```typescript
-export { default } from './ComponentName';
+import ComponentName from './ComponentName';
+
+export default ComponentName;
 ```
 
 ### Views vs Components
@@ -244,7 +246,9 @@ export default HeroSection;
 
 **HeroSection/index.ts:**
 ```typescript
-export { default } from './HeroSection';
+import HeroSection from './HeroSection';
+
+export default HeroSection;
 ```
 
 ## Migration Checklist

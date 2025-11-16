@@ -1,1 +1,3 @@
-export { default } from './LeaderboardHeader';
+import LeaderboardHeader from './LeaderboardHeader';
+
+export default LeaderboardHeader;

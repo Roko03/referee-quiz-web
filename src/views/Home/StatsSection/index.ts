@@ -1,1 +1,3 @@
-export { default } from './StatsSection';
+import StatsSection from './StatsSection';
+
+export default StatsSection;

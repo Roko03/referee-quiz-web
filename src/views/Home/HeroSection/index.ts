@@ -1,1 +1,3 @@
-export { default } from './HeroSection';
+import HeroSection from './HeroSection';
+
+export default HeroSection;
