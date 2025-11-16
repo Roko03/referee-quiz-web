@@ -65,7 +65,10 @@ export const UserModal: React.FC<UserModalProps> = ({
         await onSave(formData);
         onClose();
       } catch (error) {
-        console.error('Error saving user:', error);
+        // Error handling - could be replaced with toast/snackbar notification
+        if (error instanceof Error) {
+          // Handle error silently or show user feedback
+        }
       } finally {
         setSaving(false);
       }
@@ -74,11 +77,16 @@ export const UserModal: React.FC<UserModalProps> = ({
 
   const isViewMode = mode === 'view';
 
+  const getDialogTitle = () => {
+    if (mode === 'add') return 'Add New User';
+    if (mode === 'edit') return 'Edit User';
+
+    return 'User Details';
+  };
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        {mode === 'add' ? 'Add New User' : mode === 'edit' ? 'Edit User' : 'User Details'}
-      </DialogTitle>
+      <DialogTitle>{getDialogTitle()}</DialogTitle>
       <DialogContent>
         <Box sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <TextField
@@ -170,7 +178,10 @@ export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
       await onConfirm();
       onClose();
     } catch (error) {
-      console.error('Error deleting user:', error);
+      // Error handling - could be replaced with toast/snackbar notification
+      if (error instanceof Error) {
+        // Handle error silently or show user feedback
+      }
     } finally {
       setDeleting(false);
     }

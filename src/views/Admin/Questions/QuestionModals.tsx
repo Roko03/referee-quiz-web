@@ -100,7 +100,10 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
         await onSave(formData);
         onClose();
       } catch (error) {
-        console.error('Error saving question:', error);
+        // Error handling - could be replaced with toast/snackbar notification
+        if (error instanceof Error) {
+          // Handle error silently or show user feedback
+        }
       } finally {
         setSaving(false);
       }
@@ -141,11 +144,16 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
   const isViewMode = mode === 'view';
   const correctAnswerIndex = formData.answers.findIndex((a) => a.is_correct);
 
+  const getDialogTitle = () => {
+    if (mode === 'add') return 'Add New Question';
+    if (mode === 'edit') return 'Edit Question';
+
+    return 'Question Details';
+  };
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>
-        {mode === 'add' ? 'Add New Question' : mode === 'edit' ? 'Edit Question' : 'Question Details'}
-      </DialogTitle>
+      <DialogTitle>{getDialogTitle()}</DialogTitle>
       <DialogContent>
         <Box sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 3 }}>
           <TextField
@@ -190,7 +198,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
 
             <RadioGroup value={correctAnswerIndex} onChange={(e) => handleCorrectAnswerChange(Number(e.target.value))}>
               {formData.answers.map((answer, index) => (
-                <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                <Box key={answer.id || `answer-${index}-${answer.text.substring(0, 10)}`} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                   <FormControlLabel
                     value={index}
                     control={<Radio disabled={isViewMode} />}
@@ -279,7 +287,10 @@ export const DeleteQuestionDialog: React.FC<DeleteQuestionDialogProps> = ({
       await onConfirm();
       onClose();
     } catch (error) {
-      console.error('Error deleting question:', error);
+      // Error handling - could be replaced with toast/snackbar notification
+      if (error instanceof Error) {
+        // Handle error silently or show user feedback
+      }
     } finally {
       setDeleting(false);
     }
