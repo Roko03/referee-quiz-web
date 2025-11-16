@@ -35,6 +35,27 @@ interface Question {
   answers: Answer[];
 }
 
+interface QuizSessionInsert {
+  user_id: string | undefined;
+  quiz_id: string;
+  total_questions: number;
+  started_at: string;
+}
+
+interface QuizSessionUpdate {
+  completed_at: string;
+  correct_count: number;
+  score: number;
+  passed: boolean;
+}
+
+interface UserAnswerInsert {
+  session_id: string | null;
+  question_id: string;
+  answer_id: string;
+  time_taken: number;
+}
+
 interface QuizPageProps {
   quizId: string;
 }
@@ -77,14 +98,16 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
       if (questionsData) {
         setQuestions(questionsData as Question[]);
 
+        const sessionData: QuizSessionInsert = {
+          user_id: user?.id,
+          quiz_id: quizId,
+          total_questions: questionsData.length,
+          started_at: new Date().toISOString(),
+        };
+
         const { data: session } = await supabase
           .from('quiz_sessions')
-          .insert({
-            user_id: user?.id,
-            quiz_id: quizId,
-            total_questions: questionsData.length,
-            started_at: new Date().toISOString(),
-          })
+          .insert(sessionData as never)
           .select('id')
           .single();
 
@@ -114,14 +137,16 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
     const score = (correctCount / questions.length) * 100;
     const passed = score >= 90;
 
+    const updateData: QuizSessionUpdate = {
+      completed_at: new Date().toISOString(),
+      correct_count: correctCount,
+      score,
+      passed,
+    };
+
     await supabase
       .from('quiz_sessions')
-      .update({
-        completed_at: new Date().toISOString(),
-        correct_count: correctCount,
-        score,
-        passed,
-      })
+      .update(updateData as never)
       .eq('id', sessionId);
 
     router.push(`/review/${sessionId}`);
@@ -136,12 +161,14 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
         [currentQuestion.id]: selectedAnswerId,
       }));
 
-      await supabase.from('user_answers').insert({
+      const answerData: UserAnswerInsert = {
         session_id: sessionId,
         question_id: currentQuestion.id,
         answer_id: selectedAnswerId,
         time_taken: QUESTION_TIME_LIMIT - timeLeft,
-      });
+      };
+
+      await supabase.from('user_answers').insert(answerData as never);
     }
 
     if (currentQuestionIndex < questions.length - 1) {
