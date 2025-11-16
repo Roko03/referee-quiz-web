@@ -34,7 +34,7 @@ interface Answer {
 
 interface Question {
   id: string;
-  question_text: string;
+  text: string;
   answers: Answer[];
 }
 
@@ -85,7 +85,7 @@ const QuizReviewPage = ({ sessionId }: QuizReviewPageProps) => {
         .select(
           `
           id,
-          question_text,
+          text,
           answers(id, text, is_correct)
         `,
         )
@@ -224,7 +224,7 @@ const QuizReviewPage = ({ sessionId }: QuizReviewPageProps) => {
                     color={isCorrect ? 'success' : 'error'}
                   />
                   <Typography variant="h6" sx={{ flex: 1 }}>
-                    {question.question_text}
+                    {question.text}
                   </Typography>
                   {isCorrect ? (
                     <CheckCircle color="success" />
