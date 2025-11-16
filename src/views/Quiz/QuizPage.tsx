@@ -35,6 +35,12 @@ interface Question {
   answers: Answer[];
 }
 
+interface QuizData {
+  id: string;
+  category_id: string;
+  question_count: number | null;
+}
+
 interface QuizSessionInsert {
   user_id: string | undefined;
   quiz_id: string;
@@ -75,7 +81,9 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
 
   useEffect(() => {
     const fetchQuiz = async () => {
-      const { data: quizData } = await supabase.from('quizzes').select('*').eq('id', quizId).single();
+      const { data } = await supabase.from('quizzes').select('*').eq('id', quizId).single();
+
+      const quizData = data as QuizData | null;
 
       if (!quizData) {
         router.push('/');
