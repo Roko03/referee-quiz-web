@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Box, Typography } from '@mui/material';
-import { Trophy } from '@mui/icons-material';
+import { EmojiEvents } from '@mui/icons-material';
 
 const LeaderboardHeader = () => (
   <Box sx={{ textAlign: 'center', mb: 6 }}>
@@ -18,7 +18,7 @@ const LeaderboardHeader = () => (
         mb: 2,
       }}
     >
-      <Trophy sx={{ fontSize: 32, color: 'hsl(220, 26%, 6%)' }} />
+      <EmojiEvents sx={{ fontSize: 32, color: 'hsl(220, 26%, 6%)' }} />
     </Box>
     <Typography variant="h3" sx={{ fontWeight: 700, mb: 2 }}>
       Global Leaderboard

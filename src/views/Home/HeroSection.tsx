@@ -2,7 +2,7 @@ import React from 'react';
 
 import Link from 'next/link';
 import { Box, Container, Typography, Button } from '@mui/material';
-import { PlayCircle, Award } from '@mui/icons-material';
+import { PlayCircle, EmojiEvents } from '@mui/icons-material';
 
 const HeroSection = () => (
   <Box
@@ -81,7 +81,7 @@ const HeroSection = () => (
         >
           Start Quiz
         </Button>
-        <Button size="large" variant="outlined" component={Link} href="/leaderboard" startIcon={<Award />}>
+        <Button size="large" variant="outlined" component={Link} href="/leaderboard" startIcon={<EmojiEvents />}>
           View Leaderboard
         </Button>
       </Box>

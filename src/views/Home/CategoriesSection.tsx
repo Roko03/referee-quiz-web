@@ -5,7 +5,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Box, Container, Typography, Button, Card, CardContent, Grid } from '@mui/material';
-import { PlayCircle, Trophy, Settings } from '@mui/icons-material';
+import { PlayCircle, EmojiEvents, Settings } from '@mui/icons-material';
 
 interface Category {
   id: string;
@@ -67,7 +67,7 @@ const CategoriesSection = ({ categories }: CategoriesSectionProps) => {
                     },
                   }}
                 >
-                  <Trophy sx={{ fontSize: 32, color: 'hsl(220, 26%, 6%)' }} />
+                  <EmojiEvents sx={{ fontSize: 32, color: 'hsl(220, 26%, 6%)' }} />
                 </Box>
                 <Typography variant="h5" sx={{ fontWeight: 600, mb: 1, color: 'hsl(220, 26%, 6%)' }}>
                   All Categories Quiz

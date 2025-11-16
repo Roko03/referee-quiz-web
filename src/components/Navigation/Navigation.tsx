@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import {
   Menu as MenuIcon,
-  Trophy,
+  EmojiEvents,
   Person,
   Logout,
   People,
@@ -108,7 +108,7 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2, alignItems: 'center' }}>
-            <Button component={Link} href="/leaderboard" startIcon={<Trophy />} color="inherit">
+            <Button component={Link} href="/leaderboard" startIcon={<EmojiEvents />} color="inherit">
               Leaderboard
             </Button>
 
@@ -169,7 +169,7 @@ const Navigation = () => {
                 <ListItem disablePadding>
                   <ListItemButton component={Link} href="/leaderboard" onClick={closeMobileMenu}>
                     <ListItemIcon>
-                      <Trophy />
+                      <EmojiEvents />
                     </ListItemIcon>
                     <ListItemText primary="Leaderboard" />
                   </ListItemButton>

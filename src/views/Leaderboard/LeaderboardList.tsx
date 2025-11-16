@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Box, Card, CardContent, Typography, Avatar, Divider } from '@mui/material';
-import { Trophy, EmojiEvents, WorkspacePremium } from '@mui/icons-material';
+import { EmojiEvents, WorkspacePremium, Stars } from '@mui/icons-material';
 
 interface LeaderboardEntry {
   username: string;
@@ -16,15 +16,15 @@ interface LeaderboardListProps {
 
 const getMedalIcon = (index: number) => {
   if (index === 0) {
-    return <Trophy sx={{ fontSize: 24, color: 'hsl(38, 92%, 50%)' }} />;
+    return <EmojiEvents sx={{ fontSize: 24, color: 'hsl(45, 100%, 51%)' }} />;
   }
 
   if (index === 1) {
-    return <EmojiEvents sx={{ fontSize: 24, color: 'text.secondary' }} />;
+    return <WorkspacePremium sx={{ fontSize: 24, color: 'hsl(0, 0%, 75%)' }} />;
   }
 
   if (index === 2) {
-    return <WorkspacePremium sx={{ fontSize: 24, color: 'hsl(38, 92%, 50%)', opacity: 0.7 }} />;
+    return <Stars sx={{ fontSize: 24, color: 'hsl(30, 80%, 55%)' }} />;
   }
 
   return (
