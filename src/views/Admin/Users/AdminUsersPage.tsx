@@ -8,6 +8,7 @@ import {
   Box,
   Typography,
   TextField,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -26,11 +27,13 @@ import {
   Visibility as ViewIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
+  PersonAdd as PersonAddIcon,
 } from '@mui/icons-material';
 
 import Layout from '@/components/Layout';
 import { useAuthStore } from '@/valtio/auth';
 import { supabase } from '@/lib/supabase/client';
+import { UserModal, DeleteUserDialog } from './UserModals';
 
 interface UserRole {
   role: string;
@@ -59,6 +62,10 @@ const AdminUsersPage = () => {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [modalMode, setModalMode] = useState<'view' | 'edit' | 'add'>('view');
+  const [showModal, setShowModal] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -133,6 +140,73 @@ const AdminUsersPage = () => {
     return usr.username;
   };
 
+  const handleViewUser = (usr: User) => {
+    setSelectedUser(usr);
+    setModalMode('view');
+    setShowModal(true);
+  };
+
+  const handleEditUser = (usr: User) => {
+    setSelectedUser(usr);
+    setModalMode('edit');
+    setShowModal(true);
+  };
+
+  const handleAddUser = () => {
+    setSelectedUser(null);
+    setModalMode('add');
+    setShowModal(true);
+  };
+
+  const handleDeleteUser = (usr: User) => {
+    setSelectedUser(usr);
+    setShowDeleteDialog(true);
+  };
+
+  const handleSaveUser = async (userData: Partial<User>) => {
+    if (modalMode === 'edit' && selectedUser) {
+      // Update user profile
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          phone: userData.phone,
+        })
+        .eq('id', selectedUser.id);
+
+      if (profileError) throw profileError;
+
+      // Update user role if changed
+      if (userData.role) {
+        // Delete existing roles
+        await supabase.from('user_roles').delete().eq('user_id', selectedUser.id);
+
+        // Insert new role
+        await supabase.from('user_roles').insert({
+          user_id: selectedUser.id,
+          role: userData.role,
+        });
+      }
+    }
+
+    // Refresh user list
+    await fetchUsers();
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedUser) return;
+
+    // Delete user roles first
+    await supabase.from('user_roles').delete().eq('user_id', selectedUser.id);
+
+    // Note: Actual user deletion should be handled carefully
+    // For now, we'll just show a placeholder
+    // In production, you might want to soft-delete or restrict this operation
+
+    await fetchUsers();
+  };
+
   if (authLoading || !user) {
     return (
       <Layout>
@@ -153,6 +227,9 @@ const AdminUsersPage = () => {
             <Typography variant="h4" component="h1">
               User Management
             </Typography>
+            <Button variant="contained" startIcon={<PersonAddIcon />} onClick={handleAddUser}>
+              Add User
+            </Button>
           </Box>
 
           <Box sx={{ mb: 3 }}>
@@ -227,13 +304,13 @@ const AdminUsersPage = () => {
                           {new Date(usr.created_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell align="right">
-                          <IconButton size="small" title="View">
+                          <IconButton size="small" title="View" onClick={() => handleViewUser(usr)}>
                             <ViewIcon fontSize="small" />
                           </IconButton>
-                          <IconButton size="small" title="Edit">
+                          <IconButton size="small" title="Edit" onClick={() => handleEditUser(usr)}>
                             <EditIcon fontSize="small" />
                           </IconButton>
-                          <IconButton size="small" title="Delete" color="error">
+                          <IconButton size="small" title="Delete" color="error" onClick={() => handleDeleteUser(usr)}>
                             <DeleteIcon fontSize="small" />
                           </IconButton>
                         </TableCell>
@@ -252,6 +329,21 @@ const AdminUsersPage = () => {
           </Box>
         </Box>
       </Container>
+
+      <UserModal
+        open={showModal}
+        user={selectedUser}
+        mode={modalMode}
+        onClose={() => setShowModal(false)}
+        onSave={handleSaveUser}
+      />
+
+      <DeleteUserDialog
+        open={showDeleteDialog}
+        user={selectedUser}
+        onClose={() => setShowDeleteDialog(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </Layout>
   );
 };

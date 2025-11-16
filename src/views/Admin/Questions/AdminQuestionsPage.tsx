@@ -34,6 +34,7 @@ import {
 import Layout from '@/components/Layout';
 import { useAuthStore } from '@/valtio/auth';
 import { supabase } from '@/lib/supabase/client';
+import { QuestionModal, DeleteQuestionDialog } from './QuestionModals';
 
 interface Answer {
   id: string;
@@ -64,6 +65,10 @@ const AdminQuestionsPage = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState('all');
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
+  const [modalMode, setModalMode] = useState<'view' | 'edit' | 'add'>('view');
+  const [showModal, setShowModal] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -127,6 +132,100 @@ const AdminQuestionsPage = () => {
     setFilteredQuestions(filtered);
   }, [search, activeTab, questions]);
 
+  const handleViewQuestion = (question: Question) => {
+    setSelectedQuestion(question);
+    setModalMode('view');
+    setShowModal(true);
+  };
+
+  const handleEditQuestion = (question: Question) => {
+    setSelectedQuestion(question);
+    setModalMode('edit');
+    setShowModal(true);
+  };
+
+  const handleAddQuestion = () => {
+    setSelectedQuestion(null);
+    setModalMode('add');
+    setShowModal(true);
+  };
+
+  const handleDeleteQuestion = (question: Question) => {
+    setSelectedQuestion(question);
+    setShowDeleteDialog(true);
+  };
+
+  const handleSaveQuestion = async (questionData: {
+    text: string;
+    category_id: string;
+    answers: { id?: string; text: string; is_correct: boolean }[];
+  }) => {
+    if (modalMode === 'add') {
+      // Insert new question
+      const { data: newQuestion, error: questionError } = await supabase
+        .from('questions')
+        .insert({
+          text: questionData.text,
+          category_id: questionData.category_id,
+        })
+        .select()
+        .single();
+
+      if (questionError) throw questionError;
+
+      const questionId = (newQuestion as { id: string }).id;
+
+      // Insert answers
+      const answersToInsert = questionData.answers
+        .filter((a) => a.text.trim())
+        .map((a) => ({
+          question_id: questionId,
+          text: a.text,
+          is_correct: a.is_correct,
+        }));
+
+      await supabase.from('answers').insert(answersToInsert);
+    } else if (modalMode === 'edit' && selectedQuestion) {
+      // Update question
+      await supabase
+        .from('questions')
+        .update({
+          text: questionData.text,
+          category_id: questionData.category_id,
+        })
+        .eq('id', selectedQuestion.id);
+
+      // Delete old answers
+      await supabase.from('answers').delete().eq('question_id', selectedQuestion.id);
+
+      // Insert new answers
+      const answersToInsert = questionData.answers
+        .filter((a) => a.text.trim())
+        .map((a) => ({
+          question_id: selectedQuestion.id,
+          text: a.text,
+          is_correct: a.is_correct,
+        }));
+
+      await supabase.from('answers').insert(answersToInsert);
+    }
+
+    // Refresh questions list
+    await fetchQuestions();
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedQuestion) return;
+
+    // Delete answers first
+    await supabase.from('answers').delete().eq('question_id', selectedQuestion.id);
+
+    // Delete question
+    await supabase.from('questions').delete().eq('id', selectedQuestion.id);
+
+    await fetchQuestions();
+  };
+
   if (authLoading || !user) {
     return (
       <Layout>
@@ -147,7 +246,7 @@ const AdminQuestionsPage = () => {
             <Typography variant="h4" component="h1">
               Question Management
             </Typography>
-            <Button variant="contained" startIcon={<AddIcon />}>
+            <Button variant="contained" startIcon={<AddIcon />} onClick={handleAddQuestion}>
               Add Question
             </Button>
           </Box>
@@ -169,7 +268,13 @@ const AdminQuestionsPage = () => {
           </Box>
 
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-            <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
+            <Tabs
+              value={activeTab}
+              onChange={(e, newValue) => setActiveTab(newValue)}
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
+            >
               <Tab label="All" value="all" />
               {categories.map((cat) => (
                 <Tab key={cat.id} label={cat.name} value={cat.id} />
@@ -225,13 +330,13 @@ const AdminQuestionsPage = () => {
                           {new Date(question.created_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell align="right">
-                          <IconButton size="small" title="View">
+                          <IconButton size="small" title="View" onClick={() => handleViewQuestion(question)}>
                             <ViewIcon fontSize="small" />
                           </IconButton>
-                          <IconButton size="small" title="Edit">
+                          <IconButton size="small" title="Edit" onClick={() => handleEditQuestion(question)}>
                             <EditIcon fontSize="small" />
                           </IconButton>
-                          <IconButton size="small" title="Delete" color="error">
+                          <IconButton size="small" title="Delete" color="error" onClick={() => handleDeleteQuestion(question)}>
                             <DeleteIcon fontSize="small" />
                           </IconButton>
                         </TableCell>
@@ -250,6 +355,22 @@ const AdminQuestionsPage = () => {
           </Box>
         </Box>
       </Container>
+
+      <QuestionModal
+        open={showModal}
+        question={selectedQuestion}
+        categories={categories}
+        mode={modalMode}
+        onClose={() => setShowModal(false)}
+        onSave={handleSaveQuestion}
+      />
+
+      <DeleteQuestionDialog
+        open={showDeleteDialog}
+        question={selectedQuestion}
+        onClose={() => setShowDeleteDialog(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </Layout>
   );
 };
