@@ -10,30 +10,37 @@ import Layout from '@/components/Layout';
 interface TermsContentProps {
   frontmatter: {
     title: string;
-    lastUpdated?: string;
+    lastUpdated?: string | Date;
   };
   content: string;
 }
 
-const TermsContent = ({ frontmatter, content }: TermsContentProps) => (
-  <Layout>
-    <Container maxWidth="md" sx={{ py: 6 }}>
-      <Typography
-        variant="h3"
-        component="h1"
-        sx={{
-          mb: 1,
-          fontWeight: 700,
-        }}
-      >
-        {frontmatter.title}
-      </Typography>
+const TermsContent = ({ frontmatter, content }: TermsContentProps) => {
+  const lastUpdated = frontmatter.lastUpdated
+    ? typeof frontmatter.lastUpdated === 'string'
+      ? frontmatter.lastUpdated
+      : frontmatter.lastUpdated.toLocaleDateString()
+    : null;
 
-      {frontmatter.lastUpdated && (
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-          Last Updated: {frontmatter.lastUpdated}
+  return (
+    <Layout>
+      <Container maxWidth="md" sx={{ py: 6 }}>
+        <Typography
+          variant="h3"
+          component="h1"
+          sx={{
+            mb: 1,
+            fontWeight: 700,
+          }}
+        >
+          {frontmatter.title}
         </Typography>
-      )}
+
+        {lastUpdated && (
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
+            Last Updated: {lastUpdated}
+          </Typography>
+        )}
 
       <Box
         sx={{
@@ -93,8 +100,9 @@ const TermsContent = ({ frontmatter, content }: TermsContentProps) => (
       >
         <MDXRemote source={content} />
       </Box>
-    </Container>
-  </Layout>
-);
+      </Container>
+    </Layout>
+  );
+};
 
 export default TermsContent;
