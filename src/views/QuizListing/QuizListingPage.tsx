@@ -35,7 +35,18 @@ const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
   useEffect(() => {
     const fetchCategory = async () => {
       if (categoryName === 'all-categories') {
-        router.push('/');
+        // Fetch all categories and redirect to custom quiz with all selected
+        const { data: allCategories } = await supabase
+          .from('question_categories')
+          .select('id');
+
+        if (allCategories && allCategories.length > 0) {
+          const categoryIds = allCategories.map((cat) => cat.id).join(',');
+
+          router.push(`/quiz/custom?categories=${categoryIds}&count=24`);
+        } else {
+          router.push('/');
+        }
 
         return;
       }
