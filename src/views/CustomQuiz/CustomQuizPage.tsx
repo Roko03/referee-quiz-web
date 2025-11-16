@@ -68,7 +68,12 @@ const CustomQuizPage = () => {
       is_custom: true,
     };
 
-    const { data: quiz } = await supabase.from('quizzes').insert(quizData).select('id').single();
+    // Type assertion needed due to overly strict Supabase generated types
+    const { data: quiz } = await supabase
+      .from('quizzes')
+      .insert(quizData as never)
+      .select('id')
+      .single();
 
     if (quiz) {
       router.push(`/quiz/${quiz.id}`);
