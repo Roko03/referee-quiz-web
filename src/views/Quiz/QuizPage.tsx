@@ -31,7 +31,7 @@ interface Answer {
 
 interface Question {
   id: string;
-  question_text: string;
+  text: string;
   answers: Answer[];
 }
 
@@ -100,7 +100,7 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
         .select(
           `
           id,
-          question_text,
+          text,
           answers(id, text, is_correct)
         `,
         )
@@ -255,7 +255,7 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
         <Card sx={{ mb: 4 }}>
           <CardContent sx={{ p: 4 }}>
             <Typography variant="h5" sx={{ mb: 4, fontWeight: 600 }}>
-              {currentQuestion.question_text}
+              {currentQuestion.text}
             </Typography>
 
             <FormControl component="fieldset" fullWidth>
