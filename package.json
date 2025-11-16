@@ -13,6 +13,7 @@
     "build:static": "next build && next export",
     "analyze": "ANALYZE=true next build",
     "start": "next start",
+    "type-check": "tsc --noEmit",
     "lint:base": "pretty-quick --staged && eslint --ext .ts,.tsx ./",
     "lint:styles": "stylelint '**/*.scss' --fix",
     "lint": "yarn lint:base --fix --cache --cache-location=./node_modules/.cache/ && yarn lint:styles",
