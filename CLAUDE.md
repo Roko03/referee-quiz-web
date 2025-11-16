@@ -98,14 +98,31 @@ export default ComponentName;
 
 ## Page Composition Pattern
 
-**CORRECT** - app/(home)/page.tsx:
+### Server/Client Component Architecture
+
+**CRITICAL: All `page.tsx` files MUST be server components for SSR**
+
+**CORRECT** - app/(home)/page.tsx (Server Component):
 ```typescript
 import HeroSection from '@/views/Home/HeroSection';
 import StatsSection from '@/views/Home/StatsSection';
 import CategoriesSection from '@/views/Home/CategoriesSection';
 import Layout from '@/components/Layout';
+import { createClient } from '@/lib/supabase/server';
 
-export default function HomePage() {
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  image_url: string | null;
+}
+
+export default async function HomePage() {
+  // Server-side data fetching
+  const supabase = await createClient();
+  const { data } = await supabase.from('question_categories').select('*').order('name');
+  const categories = (data as Category[] | null) || [];
+
   return (
     <Layout>
       <HeroSection />
@@ -116,12 +133,61 @@ export default function HomePage() {
 }
 ```
 
+**View sections (client components)** - src/views/Home/HeroSection/HeroSection.tsx:
+```typescript
+'use client';
+
+import React from 'react';
+import { Box, Container, Typography, Button } from '@mui/material';
+import styles from './HeroSection.module.scss';
+
+const HeroSection = () => (
+  <Box className={styles.hero}>
+    {/* ... */}
+  </Box>
+);
+
+export default HeroSection;
+```
+
+### Rules:
+
+1. **`page.tsx` = Server Component**
+   - NO `'use client'` directive
+   - Async function: `export default async function`
+   - Server-side data fetching: `await createClient()`
+   - NO `useEffect`, `useState`, or other React hooks
+   - Pass data to child components as props
+
+2. **View Sections = Client Components**
+   - Add `'use client'` directive if using:
+     - MUI components
+     - React hooks (`useState`, `useEffect`, `useRouter`, etc.)
+     - Browser APIs
+   - Receive data as props from page.tsx
+
+3. **Layout = Client Component**
+   - Already has `'use client'`
+   - Uses MUI components internally
+
 **INCORRECT** - Do NOT create wrapper components:
 ```typescript
 // ❌ WRONG - Don't do this
 import HomePage from '@/views/Home';
 
 export default HomePage;
+```
+
+**INCORRECT** - Do NOT use client hooks in page.tsx:
+```typescript
+// ❌ WRONG - Don't do this
+'use client';
+
+export default function HomePage() {
+  const [data, setData] = useState([]);
+  useEffect(() => { /* ... */ }, []);
+  // ...
+}
 ```
 
 ## Styling Guidelines
