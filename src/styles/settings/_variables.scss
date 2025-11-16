@@ -13,6 +13,53 @@ $black-300: rgba($black, 0.3);
 $black-200: rgba($black, 0.2);
 $black-100: rgba($black, 0.1);
 
+// Theme Colors (from Lovable project)
+// Converting HSL to hex/rgba for SCSS usage
+// Background: hsl(220, 26%, 6%) -> dark blue-gray
+$background: hsl(220, 26%, 6%);
+$foreground: hsl(0, 0%, 98%);
+
+// Card colors
+$card: hsl(220, 24%, 9%);
+$card-foreground: hsl(0, 0%, 98%);
+
+// Popover colors
+$popover: hsl(220, 24%, 9%);
+$popover-foreground: hsl(0, 0%, 98%);
+
+// Primary color: green
+$primary: hsl(142, 76%, 45%);
+$primary-foreground: hsl(220, 26%, 6%);
+$primary-light: hsl(142, 76%, 56%);
+$primary-dark: hsl(142, 76%, 36%);
+
+// Secondary colors
+$secondary: hsl(220, 20%, 14%);
+$secondary-foreground: hsl(0, 0%, 98%);
+
+// Muted colors
+$muted: hsl(220, 20%, 14%);
+$muted-foreground: hsl(220, 10%, 60%);
+
+// Accent colors
+$accent: hsl(142, 76%, 45%);
+$accent-foreground: hsl(220, 26%, 6%);
+
+// Destructive/error colors
+$destructive: hsl(0, 72%, 51%);
+$destructive-foreground: hsl(0, 0%, 98%);
+
+// Border and input colors
+$border: hsl(220, 20%, 18%);
+$input: hsl(220, 20%, 18%);
+$ring: hsl(142, 76%, 45%);
+
+// Additional semantic colors
+$success: hsl(142, 76%, 45%);
+$success-foreground: hsl(220, 26%, 6%);
+$warning: hsl(38, 92%, 50%);
+$warning-foreground: hsl(220, 26%, 6%);
+
 // Fonts
 $primary-font-family: inter, system-ui, avenir, helvetica, arial, sans-serif;
 
