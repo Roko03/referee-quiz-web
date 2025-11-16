@@ -40,8 +40,10 @@ const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
           .from('question_categories')
           .select('id');
 
-        if (allCategories && allCategories.length > 0) {
-          const categoryIds = allCategories.map((cat) => cat.id).join(',');
+        const categories = allCategories as CategoryData[] | null;
+
+        if (categories && categories.length > 0) {
+          const categoryIds = categories.map((cat) => cat.id).join(',');
 
           router.push(`/quiz/custom?categories=${categoryIds}&count=24`);
         } else {
