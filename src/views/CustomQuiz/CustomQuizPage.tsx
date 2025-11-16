@@ -16,6 +16,8 @@ import {
   MenuItem,
   Slider,
   Alert,
+  Chip,
+  SelectChangeEvent,
 } from '@mui/material';
 import { PlayCircle, Settings } from '@mui/icons-material';
 
@@ -41,7 +43,7 @@ interface QuizResponse {
 const CustomQuizPage = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [questionCount, setQuestionCount] = useState(10);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -63,13 +65,13 @@ const CustomQuizPage = () => {
   }, []);
 
   const handleCreateQuiz = async () => {
-    if (!selectedCategory) return;
+    if (selectedCategories.length === 0) return;
 
     setCreating(true);
 
     const quizData: QuizInsert = {
       name: 'Custom Quiz',
-      category_id: selectedCategory,
+      category_id: selectedCategories[0], // Use first category for backward compatibility
       question_count: questionCount,
       is_custom: true,
     };
@@ -77,7 +79,7 @@ const CustomQuizPage = () => {
     // Type assertion needed due to overly strict Supabase generated types
     const { data } = await supabase
       .from('quizzes')
-      .insert(quizData as never)
+      .insert(quizData as unknown as never)
       .select('id')
       .single();
 
@@ -88,6 +90,16 @@ const CustomQuizPage = () => {
     }
 
     setCreating(false);
+  };
+
+  const handleCategoryChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value;
+
+    setSelectedCategories(typeof value === 'string' ? value.split(',') : value);
+  };
+
+  const handleDeleteCategory = (categoryId: string) => {
+    setSelectedCategories(selectedCategories.filter((id) => id !== categoryId));
   };
 
   if (loading) {
@@ -135,11 +147,31 @@ const CustomQuizPage = () => {
           <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <FormControl fullWidth>
-                <InputLabel>Select Category</InputLabel>
+                <InputLabel>Select Categories</InputLabel>
                 <Select
-                  value={selectedCategory}
-                  label="Select Category"
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  multiple
+                  value={selectedCategories}
+                  label="Select Categories"
+                  onChange={handleCategoryChange}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selected.map((value) => {
+                        const category = categories.find((c) => c.id === value);
+
+                        return (
+                          <Chip
+                            key={value}
+                            label={category?.name || value}
+                            size="small"
+                            onDelete={() => handleDeleteCategory(value)}
+                            onMouseDown={(event) => {
+                              event.stopPropagation();
+                            }}
+                          />
+                        );
+                      })}
+                    </Box>
+                  )}
                 >
                   {categories.map((category) => (
                     <MenuItem key={category.id} value={category.id}>
@@ -191,7 +223,11 @@ const CustomQuizPage = () => {
                   • Questions: <strong>{questionCount}</strong>
                 </Typography>
                 <Typography variant="body2">
-                  • Category: <strong>{categories.find((c) => c.id === selectedCategory)?.name || 'None'}</strong>
+                  • Categories: <strong>
+                    {selectedCategories.length > 0
+                      ? selectedCategories.map((id) => categories.find((c) => c.id === id)?.name).join(', ')
+                      : 'None'}
+                  </strong>
                 </Typography>
                 <Typography variant="body2">
                   • Leaderboard: <strong>No</strong> (custom quiz)
@@ -203,7 +239,7 @@ const CustomQuizPage = () => {
                 size="large"
                 fullWidth
                 onClick={handleCreateQuiz}
-                disabled={!selectedCategory || creating}
+                disabled={selectedCategories.length === 0 || creating}
                 startIcon={<PlayCircle />}
               >
                 {creating ? 'Creating Quiz...' : 'Start Custom Quiz'}
