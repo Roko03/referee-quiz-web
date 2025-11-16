@@ -164,6 +164,7 @@ const AdminQuestionsPage = () => {
       // Insert new question
       const { data: newQuestion, error: questionError } = await supabase
         .from('questions')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .insert({
           text: questionData.text,
           category_id: questionData.category_id,
@@ -184,11 +185,13 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await supabase.from('answers').insert(answersToInsert as any);
     } else if (modalMode === 'edit' && selectedQuestion) {
       // Update question
       await supabase
         .from('questions')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .update({
           text: questionData.text,
           category_id: questionData.category_id,
@@ -207,6 +210,7 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await supabase.from('answers').insert(answersToInsert as any);
     }
 
