@@ -12,7 +12,6 @@ import {
   CardContent,
   Button,
   Chip,
-  Grid,
 } from '@mui/material';
 import { PlayCircle, ArrowBack, Quiz } from '@mui/icons-material';
 
@@ -21,14 +20,6 @@ import { supabase } from '@/lib/supabase/client';
 
 interface CategoryData {
   id: string;
-}
-
-interface QuizData {
-  id: string;
-  name: string;
-  description: string | null;
-  question_count: number;
-  difficulty: string | null;
 }
 
 interface QuizListingPageProps {
