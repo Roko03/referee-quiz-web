@@ -4,9 +4,8 @@ import React, { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 import {
-  Container, Box, Typography, Card, CardContent, Button,
+  Container, Box, Typography, Card, CardContent, Button, Grid,
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
 import { People, Quiz, Assessment } from '@mui/icons-material';
 
 import Layout from '@/components/Layout';
