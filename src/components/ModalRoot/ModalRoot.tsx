@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useMediaQuery, useTheme } from '@mui/material';
+
+import { Theme, useMediaQuery } from '@mui/material';
 
 import Modal from './Modal';
 import SwipeableModal from './SwipeableModal';
@@ -25,31 +26,18 @@ const ModalRoot: React.FC<ModalRootProps> = ({
   fullWidth = true,
   actions,
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const customBreakpoint = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
 
-  if (isMobile) {
+  if (customBreakpoint) {
     return (
-      <SwipeableModal
-        open={open}
-        onClose={onClose}
-        title={title}
-        actions={actions}
-      >
+      <SwipeableModal open={open} onClose={onClose} title={title} actions={actions}>
         {children}
       </SwipeableModal>
     );
   }
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title={title}
-      maxWidth={maxWidth}
-      fullWidth={fullWidth}
-      actions={actions}
-    >
+    <Modal open={open} onClose={onClose} title={title} maxWidth={maxWidth} fullWidth={fullWidth} actions={actions}>
       {children}
     </Modal>
   );

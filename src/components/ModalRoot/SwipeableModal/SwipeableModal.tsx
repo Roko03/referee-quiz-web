@@ -1,13 +1,9 @@
 'use client';
 
 import React from 'react';
-import {
-  SwipeableDrawer,
-  Box,
-  Typography,
-  IconButton,
-} from '@mui/material';
+
 import { Close as CloseIcon } from '@mui/icons-material';
+import { Box, IconButton, SwipeableDrawer, Typography } from '@mui/material';
 
 import styles from './SwipeableModal.module.scss';
 
@@ -19,13 +15,7 @@ interface SwipeableModalProps {
   actions?: React.ReactNode;
 }
 
-const SwipeableModal: React.FC<SwipeableModalProps> = ({
-  open,
-  onClose,
-  title,
-  children,
-  actions,
-}) => (
+const SwipeableModal = ({ open, onClose, title, children, actions }: SwipeableModalProps) => (
   <SwipeableDrawer
     anchor="bottom"
     open={open}
@@ -47,25 +37,15 @@ const SwipeableModal: React.FC<SwipeableModalProps> = ({
           <Typography variant="h6" className={styles.title}>
             {title}
           </Typography>
-          <IconButton
-            onClick={onClose}
-            size="small"
-            className={styles.closeButton}
-          >
+          <IconButton onClick={onClose} size="small" className={styles.closeButton}>
             <CloseIcon />
           </IconButton>
         </Box>
       )}
 
-      <Box className={styles.content}>
-        {children}
-      </Box>
+      <Box className={styles.content}>{children}</Box>
 
-      {actions && (
-        <Box className={styles.actions}>
-          {actions}
-        </Box>
-      )}
+      {actions && <Box className={styles.actions}>{actions}</Box>}
     </Box>
   </SwipeableDrawer>
 );

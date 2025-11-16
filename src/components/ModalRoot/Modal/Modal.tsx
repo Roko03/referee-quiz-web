@@ -1,12 +1,8 @@
 'use client';
 
 import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from '@mui/material';
+
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 interface ModalProps {
   open: boolean;
@@ -18,21 +14,8 @@ interface ModalProps {
   actions?: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({
-  open,
-  onClose,
-  title,
-  children,
-  maxWidth = 'sm',
-  fullWidth = true,
-  actions,
-}) => (
-  <Dialog
-    open={open}
-    onClose={onClose}
-    maxWidth={maxWidth}
-    fullWidth={fullWidth}
-  >
+const Modal = ({ open, onClose, title, children, maxWidth = 'sm', fullWidth = true, actions }: ModalProps) => (
+  <Dialog open={open} onClose={onClose} maxWidth={maxWidth} fullWidth={fullWidth}>
     {title && <DialogTitle>{title}</DialogTitle>}
     <DialogContent>{children}</DialogContent>
     {actions && <DialogActions>{actions}</DialogActions>}
