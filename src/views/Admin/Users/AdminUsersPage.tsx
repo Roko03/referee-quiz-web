@@ -184,10 +184,9 @@ const AdminUsersPage = () => {
         phone: userData.phone,
       };
 
-      // @ts-ignore - Supabase generated types incorrectly infer never
       const { error: profileError } = await supabase
         .from('profiles')
-        .update(profileUpdate)
+        .update(profileUpdate as any) // eslint-disable-line @typescript-eslint/no-explicit-any
         .eq('id', selectedUser.id);
 
       if (profileError) throw profileError;
@@ -203,8 +202,7 @@ const AdminUsersPage = () => {
           role: userData.role,
         };
 
-        // @ts-ignore - Supabase generated types incorrectly infer never
-        await supabase.from('user_roles').insert(roleInsert);
+        await supabase.from('user_roles').insert(roleInsert as any); // eslint-disable-line @typescript-eslint/no-explicit-any
       }
     }
 

@@ -186,8 +186,7 @@ const AdminQuestionsPage = () => {
 
       const { data: newQuestion, error: questionError } = await supabase
         .from('questions')
-        // @ts-ignore - Supabase generated types incorrectly infer never
-        .insert(insertData)
+        .insert(insertData as any) // eslint-disable-line @typescript-eslint/no-explicit-any
         .select()
         .single();
 
@@ -204,8 +203,7 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
-      // @ts-ignore - Supabase generated types incorrectly infer never
-      await supabase.from('answers').insert(answersToInsert);
+      await supabase.from('answers').insert(answersToInsert as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     } else if (modalMode === 'edit' && selectedQuestion) {
       // Update question
       const updateData: QuestionUpdate = {
@@ -213,10 +211,9 @@ const AdminQuestionsPage = () => {
         category_id: questionData.category_id,
       };
 
-      // @ts-ignore - Supabase generated types incorrectly infer never
       await supabase
         .from('questions')
-        .update(updateData)
+        .update(updateData as any) // eslint-disable-line @typescript-eslint/no-explicit-any
         .eq('id', selectedQuestion.id);
 
       // Delete old answers
@@ -231,8 +228,7 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
-      // @ts-ignore - Supabase generated types incorrectly infer never
-      await supabase.from('answers').insert(answersToInsert);
+      await supabase.from('answers').insert(answersToInsert as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
 
     // Refresh questions list
