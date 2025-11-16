@@ -89,6 +89,9 @@ const ProfileEditPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) return;
+
     setSaving(true);
     setError(null);
 
@@ -102,7 +105,7 @@ const ProfileEditPage = () => {
     const { error: updateError } = await supabase
       .from('profiles')
       .update(updateData as never)
-      .eq('id', user?.id);
+      .eq('id', user.id);
 
     if (updateError) {
       setError(updateError.message);
