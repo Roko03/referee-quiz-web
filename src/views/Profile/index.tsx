@@ -13,8 +13,6 @@ import {
   Avatar,
   Button,
   Grid,
-  Chip,
-  Divider,
 } from '@mui/material';
 import { Edit, EmojiEvents, CheckCircle, Cancel, History } from '@mui/icons-material';
 

@@ -30,7 +30,6 @@ interface Category {
 
 const CustomQuizPage = () => {
   const router = useRouter();
-  const { user } = useAuthStore();
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [questionCount, setQuestionCount] = useState(10);
@@ -112,7 +111,7 @@ const CustomQuizPage = () => {
         </Box>
 
         <Alert severity="info" sx={{ mb: 4 }}>
-          Custom quizzes are for practice only and won't be counted in the leaderboard.
+          Custom quizzes are for practice only and won&apos;t be counted in the leaderboard.
         </Alert>
 
         <Card>

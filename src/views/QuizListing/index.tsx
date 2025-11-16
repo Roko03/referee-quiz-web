@@ -34,7 +34,6 @@ interface QuizListingPageProps {
 const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
   const router = useRouter();
   const [quizzes, setQuizzes] = useState<QuizData[]>([]);
-  const [categoryId, setCategoryId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -56,8 +55,6 @@ const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
 
         return;
       }
-
-      setCategoryId(category.id);
 
       const { data: quizzesData } = await supabase
         .from('quizzes')
@@ -158,13 +155,12 @@ const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
                           <Chip
                             label={quiz.difficulty}
                             size="small"
-                            color={
-                              quiz.difficulty === 'Easy'
-                                ? 'success'
-                                : quiz.difficulty === 'Medium'
-                                  ? 'warning'
-                                  : 'error'
-                            }
+                            color={(() => {
+                              if (quiz.difficulty === 'Easy') return 'success';
+                              if (quiz.difficulty === 'Medium') return 'warning';
+
+                              return 'error';
+                            })()}
                           />
                         )}
                       </Box>

@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  Box,
   Container,
   Typography,
   Card,
@@ -98,7 +97,7 @@ const QuizHistoryPage = () => {
                 No Quiz History Yet
               </Typography>
               <Typography color="text.secondary" sx={{ mb: 3 }}>
-                You haven't completed any quizzes yet. Start your first quiz to begin tracking your progress!
+                You haven&apos;t completed any quizzes yet. Start your first quiz to begin tracking your progress!
               </Typography>
               <Button variant="contained" component={Link} href="/">
                 Start a Quiz
@@ -138,7 +137,12 @@ const QuizHistoryPage = () => {
                       <Typography
                         sx={{
                           fontWeight: 700,
-                          color: session.score >= 90 ? 'success.main' : session.score >= 70 ? 'warning.main' : 'error.main',
+                          color: (() => {
+                            if (session.score >= 90) return 'success.main';
+                            if (session.score >= 70) return 'warning.main';
+
+                            return 'error.main';
+                          })(),
                         }}
                       >
                         {session.score.toFixed(0)}%

@@ -99,24 +99,6 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
     fetchQuiz();
   }, [quizId, router, user]);
 
-  useEffect(() => {
-    if (loading || timeLeft === 0) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          handleNextQuestion();
-
-          return QUESTION_TIME_LIMIT;
-        }
-
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, loading, currentQuestionIndex]);
-
   const handleNextQuestion = async () => {
     const currentQuestion = questions[currentQuestionIndex];
 
@@ -170,6 +152,26 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
 
     router.push(`/review/${sessionId}`);
   };
+
+  useEffect(() => {
+    if (loading || timeLeft === 0) {
+      return undefined;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          handleNextQuestion();
+
+          return QUESTION_TIME_LIMIT;
+        }
+
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, loading, currentQuestionIndex, handleNextQuestion]);
 
   if (loading) {
     return (

@@ -209,7 +209,6 @@ const QuizReviewPage = ({ sessionId }: QuizReviewPageProps) => {
         {questions.map((question, index) => {
           const userAnswer = userAnswers.find((a) => a.question_id === question.id);
           const userAnswerObj = question.answers.find((a) => a.id === userAnswer?.answer_id);
-          const correctAnswer = question.answers.find((a) => a.is_correct);
           const isCorrect = userAnswerObj?.is_correct || false;
 
           return (
@@ -238,6 +237,17 @@ const QuizReviewPage = ({ sessionId }: QuizReviewPageProps) => {
                   const isUserAnswer = answer.id === userAnswer?.answer_id;
                   const isCorrectAnswer = answer.is_correct;
 
+                  let borderColor = 'divider';
+                  let bgColor = 'background.paper';
+
+                  if (isCorrectAnswer) {
+                    borderColor = 'success.main';
+                    bgColor = 'success.light';
+                  } else if (isUserAnswer) {
+                    borderColor = 'error.main';
+                    bgColor = 'error.light';
+                  }
+
                   return (
                     <Box
                       key={answer.id}
@@ -246,16 +256,8 @@ const QuizReviewPage = ({ sessionId }: QuizReviewPageProps) => {
                         mb: 1,
                         borderRadius: 1,
                         border: '1px solid',
-                        borderColor: isCorrectAnswer
-                          ? 'success.main'
-                          : isUserAnswer
-                            ? 'error.main'
-                            : 'divider',
-                        bgcolor: isCorrectAnswer
-                          ? 'success.light'
-                          : isUserAnswer
-                            ? 'error.light'
-                            : 'background.paper',
+                        borderColor,
+                        bgcolor: bgColor,
                       }}
                     >
                       <Typography
