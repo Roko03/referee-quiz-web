@@ -19,6 +19,10 @@ import { PlayCircle, ArrowBack, Quiz } from '@mui/icons-material';
 import Layout from '@/components/Layout';
 import { supabase } from '@/lib/supabase/client';
 
+interface CategoryData {
+  id: string;
+}
+
 interface QuizData {
   id: string;
   name: string;
@@ -44,11 +48,13 @@ const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
         return;
       }
 
-      const { data: category } = await supabase
+      const { data: categoryData } = await supabase
         .from('question_categories')
         .select('id')
         .eq('name', categoryName)
         .single();
+
+      const category = categoryData as CategoryData | null;
 
       if (!category) {
         router.push('/');
