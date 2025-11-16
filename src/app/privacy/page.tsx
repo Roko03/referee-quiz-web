@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import { Container, Typography, Box } from '@mui/material';
@@ -5,11 +7,6 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 
 import Layout from '@/components/Layout';
 import { getStaticContent } from '@/lib/mdx';
-
-export const metadata = {
-  title: 'Privacy Policy - Football Rules Quiz',
-  description: 'Our privacy policy explains how we collect, use, and protect your personal information',
-};
 
 const PrivacyPage = () => {
   const { frontmatter, content } = getStaticContent('legal', 'privacy-policy');

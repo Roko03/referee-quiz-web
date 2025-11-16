@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import { Container, Typography, Box } from '@mui/material';
@@ -5,11 +7,6 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 
 import Layout from '@/components/Layout';
 import { getStaticContent } from '@/lib/mdx';
-
-export const metadata = {
-  title: 'Terms of Service - Football Rules Quiz',
-  description: 'Terms and conditions for using Football Rules Quiz platform',
-};
 
 const TermsPage = () => {
   const { frontmatter, content } = getStaticContent('legal', 'terms-of-service');
