@@ -27,6 +27,11 @@ interface ProfileData {
   avatar_url: string | null;
 }
 
+interface SessionData {
+  score: number;
+  passed: boolean;
+}
+
 interface QuizStats {
   totalQuizzes: number;
   averageScore: number;
@@ -64,12 +69,14 @@ const ProfilePage = () => {
         setProfile(profileData);
       }
 
-      const { data: sessions } = await supabase
+      const { data } = await supabase
         .from('quiz_sessions')
         .select('score, passed')
         .eq('user_id', user.id)
         .eq('total_questions', 24)
         .not('completed_at', 'is', null);
+
+      const sessions = data as SessionData[] | null;
 
       if (sessions && sessions.length > 0) {
         const totalQuizzes = sessions.length;
