@@ -79,6 +79,7 @@ export const UserModal: React.FC<UserModalProps> = ({
 
   const getDialogTitle = () => {
     if (mode === 'add') return 'Add New User';
+
     if (mode === 'edit') return 'Edit User';
 
     return 'User Details';

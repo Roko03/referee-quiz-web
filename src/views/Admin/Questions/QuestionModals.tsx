@@ -146,6 +146,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
 
   const getDialogTitle = () => {
     if (mode === 'add') return 'Add New Question';
+
     if (mode === 'edit') return 'Edit Question';
 
     return 'Question Details';
