@@ -168,12 +168,11 @@ const AdminUsersPage = () => {
       // Update user profile
       const { error: profileError } = await supabase
         .from('profiles')
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .update({
           first_name: userData.first_name,
           last_name: userData.last_name,
           phone: userData.phone,
-        } as any)
+        } as any) // eslint-disable-line @typescript-eslint/no-explicit-any
         .eq('id', selectedUser.id);
 
       if (profileError) throw profileError;
@@ -184,11 +183,10 @@ const AdminUsersPage = () => {
         await supabase.from('user_roles').delete().eq('user_id', selectedUser.id);
 
         // Insert new role
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await supabase.from('user_roles').insert({
           user_id: selectedUser.id,
           role: userData.role,
-        } as any);
+        } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
       }
     }
 

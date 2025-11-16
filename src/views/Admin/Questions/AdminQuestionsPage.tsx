@@ -164,11 +164,10 @@ const AdminQuestionsPage = () => {
       // Insert new question
       const { data: newQuestion, error: questionError } = await supabase
         .from('questions')
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .insert({
           text: questionData.text,
           category_id: questionData.category_id,
-        } as any)
+        } as any) // eslint-disable-line @typescript-eslint/no-explicit-any
         .select()
         .single();
 
@@ -185,17 +184,15 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await supabase.from('answers').insert(answersToInsert as any);
+      await supabase.from('answers').insert(answersToInsert as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     } else if (modalMode === 'edit' && selectedQuestion) {
       // Update question
       await supabase
         .from('questions')
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .update({
           text: questionData.text,
           category_id: questionData.category_id,
-        } as any)
+        } as any) // eslint-disable-line @typescript-eslint/no-explicit-any
         .eq('id', selectedQuestion.id);
 
       // Delete old answers
@@ -210,8 +207,7 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await supabase.from('answers').insert(answersToInsert as any);
+      await supabase.from('answers').insert(answersToInsert as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
 
     // Refresh questions list
