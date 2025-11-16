@@ -89,8 +89,20 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
           { text: '', is_correct: false },
         ],
       });
+    } else if (mode === 'add') {
+      // Reset form for add mode
+      setFormData({
+        text: '',
+        category_id: '',
+        answers: [
+          { text: '', is_correct: true },
+          { text: '', is_correct: false },
+          { text: '', is_correct: false },
+          { text: '', is_correct: false },
+        ],
+      });
     }
-  }, [question]);
+  }, [question, mode, open]);
 
   const handleSave = async () => {
     if (onSave && formData.text && formData.category_id) {

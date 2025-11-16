@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   Dialog,
@@ -56,6 +56,28 @@ export const UserModal: React.FC<UserModalProps> = ({
   });
 
   const [saving, setSaving] = useState(false);
+
+  // Update form data when user prop changes (for edit/view modes)
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        username: user.username || '',
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        phone: user.phone || '',
+        role: user.user_roles[0]?.role || 'user',
+      });
+    } else if (mode === 'add') {
+      // Reset form for add mode
+      setFormData({
+        username: '',
+        first_name: '',
+        last_name: '',
+        phone: '',
+        role: 'user',
+      });
+    }
+  }, [user, mode, open]);
 
   const handleSave = async () => {
     if (onSave) {
