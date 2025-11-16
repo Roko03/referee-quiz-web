@@ -4,8 +4,9 @@ import React, { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 import {
-  Container, Box, Typography, Card, CardContent, Grid, Button,
+  Container, Box, Typography, Card, CardContent, Button,
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { People, Quiz, Assessment } from '@mui/icons-material';
 
 import Layout from '@/components/Layout';
@@ -49,7 +50,7 @@ const AdminDashboardPage = () => {
           </Typography>
 
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Card>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -72,7 +73,7 @@ const AdminDashboardPage = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Card>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -95,7 +96,7 @@ const AdminDashboardPage = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Card>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
