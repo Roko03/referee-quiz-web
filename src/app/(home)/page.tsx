@@ -1,12 +1,8 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
 import HeroSection from '@/views/Home/HeroSection';
 import StatsSection from '@/views/Home/StatsSection';
 import CategoriesSection from '@/views/Home/CategoriesSection';
 import Layout from '@/components/Layout';
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 
 interface Category {
   id: string;
@@ -15,20 +11,11 @@ interface Category {
   image_url: string | null;
 }
 
-export default function HomePage() {
-  const [categories, setCategories] = useState<Category[]>([]);
+export default async function HomePage() {
+  const supabase = await createClient();
+  const { data } = await supabase.from('question_categories').select('*').order('name');
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const { data } = await supabase.from('question_categories').select('*').order('name');
-
-      const categoriesData = data as Category[] | null;
-
-      if (categoriesData) setCategories(categoriesData);
-    };
-
-    fetchCategories();
-  }, []);
+  const categories = (data as Category[] | null) || [];
 
   return (
     <Layout>
