@@ -1,0 +1,84 @@
+.hero {
+  position: relative;
+  padding-top: 1rem;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url(/assets/hero-stadium.jpg);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(11, 15, 25, 0.5),
+      rgba(11, 15, 25, 0.8),
+      rgb(11, 15, 25)
+    );
+  }
+}
+
+.container {
+  position: relative;
+  z-index: 10;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  text-align: center;
+
+  @media (min-width: 900px) {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, hsl(142, 76%, 36%), hsl(142, 76%, 56%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  @media (min-width: 900px) {
+    font-size: 4rem;
+  }
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--mui-palette-text-secondary);
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (min-width: 900px) {
+    font-size: 1.5rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.primaryButton {
+  box-shadow: 0 0 40px hsla(142, 76%, 45%, 0.15);
+}

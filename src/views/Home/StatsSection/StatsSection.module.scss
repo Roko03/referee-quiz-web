@@ -1,0 +1,16 @@
+.stats {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  border-top: 1px solid var(--mui-palette-divider);
+  border-bottom: 1px solid var(--mui-palette-divider);
+  background: linear-gradient(180deg, hsl(220, 24%, 9%), hsl(220, 24%, 7%));
+}
+
+.grid {
+  text-align: center;
+}
+
+.number {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}

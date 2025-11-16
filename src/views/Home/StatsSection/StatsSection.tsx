@@ -2,20 +2,14 @@ import React from 'react';
 
 import { Box, Container, Typography, Grid } from '@mui/material';
 
+import styles from './StatsSection.module.scss';
+
 const StatsSection = () => (
-  <Box
-    sx={{
-      py: 6,
-      borderTop: '1px solid',
-      borderBottom: '1px solid',
-      borderColor: 'divider',
-      background: 'linear-gradient(180deg, hsl(220, 24%, 9%), hsl(220, 24%, 7%))',
-    }}
-  >
+  <Box className={styles.stats}>
     <Container maxWidth="xl">
-      <Grid container spacing={4} sx={{ textAlign: 'center' }}>
+      <Grid container spacing={4} className={styles.grid}>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Typography variant="h3" color="primary" sx={{ fontWeight: 700, mb: 1 }}>
+          <Typography variant="h3" color="primary" className={styles.number}>
             24
           </Typography>
           <Typography variant="body1" color="text.secondary">
@@ -23,7 +17,7 @@ const StatsSection = () => (
           </Typography>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Typography variant="h3" color="primary" sx={{ fontWeight: 700, mb: 1 }}>
+          <Typography variant="h3" color="primary" className={styles.number}>
             45s
           </Typography>
           <Typography variant="body1" color="text.secondary">
@@ -31,7 +25,7 @@ const StatsSection = () => (
           </Typography>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Typography variant="h3" color="primary" sx={{ fontWeight: 700, mb: 1 }}>
+          <Typography variant="h3" color="primary" className={styles.number}>
             90%
           </Typography>
           <Typography variant="body1" color="text.secondary">
