@@ -1,7 +1,4 @@
-import { Container } from '@mui/material';
-
-import LeaderboardHeader from '@/views/Leaderboard/LeaderboardHeader';
-import LeaderboardList from '@/views/Leaderboard/LeaderboardList';
+import LeaderboardContent from '@/views/Leaderboard/LeaderboardContent';
 import Layout from '@/components/Layout';
 import { createClient } from '@/lib/supabase/server';
 
@@ -85,10 +82,7 @@ export default async function LeaderboardPage() {
 
   return (
     <Layout>
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        <LeaderboardHeader />
-        <LeaderboardList entries={leaderboard} />
-      </Container>
+      <LeaderboardContent entries={leaderboard} />
     </Layout>
   );
 }
