@@ -77,6 +77,14 @@ const CustomQuizPage = () => {
     setSelectedCategories(selectedCategories.filter((id) => id !== categoryId));
   };
 
+  const handleSelectAll = () => {
+    setSelectedCategories(categories.map((c) => c.id));
+  };
+
+  const handleClearAll = () => {
+    setSelectedCategories([]);
+  };
+
   if (loading) {
     return (
       <Layout>
@@ -121,40 +129,55 @@ const CustomQuizPage = () => {
         <Card>
           <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <FormControl fullWidth>
-                <InputLabel>Select Categories</InputLabel>
-                <Select
-                  multiple
-                  value={selectedCategories}
-                  label="Select Categories"
-                  onChange={handleCategoryChange}
-                  renderValue={(selected) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {selected.map((value) => {
-                        const category = categories.find((c) => c.id === value);
+              <Box>
+                <FormControl fullWidth>
+                  <InputLabel>Select Categories</InputLabel>
+                  <Select
+                    multiple
+                    value={selectedCategories}
+                    label="Select Categories"
+                    onChange={handleCategoryChange}
+                    renderValue={(selected) => (
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selected.map((value) => {
+                          const category = categories.find((c) => c.id === value);
 
-                        return (
-                          <Chip
-                            key={value}
-                            label={category?.name || value}
-                            size="small"
-                            onDelete={() => handleDeleteCategory(value)}
-                            onMouseDown={(event) => {
-                              event.stopPropagation();
-                            }}
-                          />
-                        );
-                      })}
-                    </Box>
-                  )}
-                >
-                  {categories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                      {category.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                          return (
+                            <Chip
+                              key={value}
+                              label={category?.name || value}
+                              size="small"
+                              onDelete={() => handleDeleteCategory(value)}
+                              onMouseDown={(event) => {
+                                event.stopPropagation();
+                              }}
+                            />
+                          );
+                        })}
+                      </Box>
+                    )}
+                  >
+                    {categories.map((category) => (
+                      <MenuItem key={category.id} value={category.id}>
+                        {category.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+                  <Button size="small" onClick={handleSelectAll} variant="outlined">
+                    Select All ({categories.length})
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={handleClearAll}
+                    variant="outlined"
+                    disabled={selectedCategories.length === 0}
+                  >
+                    Clear All
+                  </Button>
+                </Box>
+              </Box>
 
               <Box>
                 <Typography gutterBottom sx={{ mb: 2 }}>
