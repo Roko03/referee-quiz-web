@@ -51,6 +51,23 @@ interface Question {
   answers: Answer[];
 }
 
+// Types for insert/update operations
+type QuestionInsert = {
+  text: string;
+  category_id: string;
+};
+
+type QuestionUpdate = {
+  text: string;
+  category_id: string;
+};
+
+type AnswerInsert = {
+  question_id: string;
+  text: string;
+  is_correct: boolean;
+};
+
 interface Category {
   id: string;
   name: string;
@@ -162,13 +179,15 @@ const AdminQuestionsPage = () => {
   }) => {
     if (modalMode === 'add') {
       // Insert new question
+      const insertData: QuestionInsert = {
+        text: questionData.text,
+        category_id: questionData.category_id,
+      };
+
       const { data: newQuestion, error: questionError } = await supabase
         .from('questions')
         // @ts-ignore - Supabase generated types incorrectly infer never
-        .insert({
-          text: questionData.text,
-          category_id: questionData.category_id,
-        })
+        .insert(insertData)
         .select()
         .single();
 
@@ -177,7 +196,7 @@ const AdminQuestionsPage = () => {
       const questionId = (newQuestion as { id: string }).id;
 
       // Insert answers
-      const answersToInsert = questionData.answers
+      const answersToInsert: AnswerInsert[] = questionData.answers
         .filter((a) => a.text.trim())
         .map((a) => ({
           question_id: questionId,
@@ -189,20 +208,22 @@ const AdminQuestionsPage = () => {
       await supabase.from('answers').insert(answersToInsert);
     } else if (modalMode === 'edit' && selectedQuestion) {
       // Update question
+      const updateData: QuestionUpdate = {
+        text: questionData.text,
+        category_id: questionData.category_id,
+      };
+
       // @ts-ignore - Supabase generated types incorrectly infer never
       await supabase
         .from('questions')
-        .update({
-          text: questionData.text,
-          category_id: questionData.category_id,
-        })
+        .update(updateData)
         .eq('id', selectedQuestion.id);
 
       // Delete old answers
       await supabase.from('answers').delete().eq('question_id', selectedQuestion.id);
 
       // Insert new answers
-      const answersToInsert = questionData.answers
+      const answersToInsert: AnswerInsert[] = questionData.answers
         .filter((a) => a.text.trim())
         .map((a) => ({
           question_id: selectedQuestion.id,

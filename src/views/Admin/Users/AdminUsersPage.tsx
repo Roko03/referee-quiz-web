@@ -55,6 +55,18 @@ interface User {
   user_roles: UserRole[];
 }
 
+// Types for insert/update operations
+type ProfileUpdate = {
+  first_name: string | null | undefined;
+  last_name: string | null | undefined;
+  phone: string | null | undefined;
+};
+
+type UserRoleInsert = {
+  user_id: string;
+  role: string;
+};
+
 const AdminUsersPage = () => {
   const { user, loading: authLoading } = useAuthStore();
   const router = useRouter();
@@ -166,14 +178,16 @@ const AdminUsersPage = () => {
   const handleSaveUser = async (userData: Partial<User>) => {
     if (modalMode === 'edit' && selectedUser) {
       // Update user profile
+      const profileUpdate: ProfileUpdate = {
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+        phone: userData.phone,
+      };
+
       // @ts-ignore - Supabase generated types incorrectly infer never
       const { error: profileError } = await supabase
         .from('profiles')
-        .update({
-          first_name: userData.first_name,
-          last_name: userData.last_name,
-          phone: userData.phone,
-        })
+        .update(profileUpdate)
         .eq('id', selectedUser.id);
 
       if (profileError) throw profileError;
@@ -184,11 +198,13 @@ const AdminUsersPage = () => {
         await supabase.from('user_roles').delete().eq('user_id', selectedUser.id);
 
         // Insert new role
-        // @ts-ignore - Supabase generated types incorrectly infer never
-        await supabase.from('user_roles').insert({
+        const roleInsert: UserRoleInsert = {
           user_id: selectedUser.id,
           role: userData.role,
-        });
+        };
+
+        // @ts-ignore - Supabase generated types incorrectly infer never
+        await supabase.from('user_roles').insert(roleInsert);
       }
     }
 
