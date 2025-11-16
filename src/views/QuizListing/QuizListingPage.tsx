@@ -37,11 +37,12 @@ interface QuizListingPageProps {
 
 const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
   const router = useRouter();
-  const [quizzes, setQuizzes] = useState<QuizData[]>([]);
+  const [categoryId, setCategoryId] = useState<string | null>(null);
+  const [questionCount, setQuestionCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchQuizzes = async () => {
+    const fetchCategory = async () => {
       if (categoryName === 'all-categories') {
         router.push('/');
 
@@ -62,21 +63,25 @@ const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
         return;
       }
 
-      const { data: quizzesData } = await supabase
-        .from('quizzes')
-        .select('id, name, description, question_count, difficulty')
-        .eq('category_id', category.id)
-        .order('name');
+      // Count questions in this category
+      const { count } = await supabase
+        .from('questions')
+        .select('id', { count: 'exact', head: true })
+        .eq('category_id', category.id);
 
-      if (quizzesData) {
-        setQuizzes(quizzesData);
-      }
-
+      setCategoryId(category.id);
+      setQuestionCount(count || 0);
       setLoading(false);
     };
 
-    fetchQuizzes();
+    fetchCategory();
   }, [categoryName, router]);
+
+  const handleStartQuiz = () => {
+    if (categoryId) {
+      router.push(`/quiz/custom?categories=${categoryId}&count=24`);
+    }
+  };
 
   if (loading) {
     return (
@@ -100,21 +105,21 @@ const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
         </Button>
 
         <Typography variant="h3" sx={{ fontWeight: 700, mb: 2 }}>
-          {categoryName} Quizzes
+          {categoryName}
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          Select a quiz to test your knowledge
+          Test your knowledge with {questionCount} questions from this category
         </Typography>
 
-        {quizzes.length === 0 ? (
+        {questionCount === 0 ? (
           <Card>
             <CardContent sx={{ p: 4, textAlign: 'center' }}>
               <Quiz sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
               <Typography variant="h6" sx={{ mb: 2 }}>
-                No Quizzes Available
+                No Questions Available
               </Typography>
               <Typography color="text.secondary" sx={{ mb: 3 }}>
-                There are no quizzes available in this category yet. Check back later!
+                There are no questions available in this category yet. Check back later!
               </Typography>
               <Button variant="contained" component={Link} href="/">
                 Browse Other Categories
@@ -122,88 +127,59 @@ const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
             </CardContent>
           </Card>
         ) : (
-          <Grid container spacing={3}>
-            {quizzes.map((quiz) => (
-              <Grid key={quiz.id} size={{ xs: 12, md: 6 }}>
-                <Card
+          <Card
+            sx={{
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              '&:hover': {
+                transform: 'scale(1.02)',
+                boxShadow: '0 0 40px hsla(142, 76%, 45%, 0.15)',
+              },
+            }}
+            onClick={handleStartQuiz}
+          >
+            <CardContent sx={{ p: 4 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
+                <Box
                   sx={{
-                    height: '100%',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s',
-                    '&:hover': {
-                      transform: 'scale(1.02)',
-                      boxShadow: '0 0 40px hsla(142, 76%, 45%, 0.15)',
-                    },
+                    width: 64,
+                    height: 64,
+                    borderRadius: 2,
+                    background: 'linear-gradient(135deg, hsl(142, 76%, 36%), hsl(142, 76%, 56%))',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mr: 3,
                   }}
-                  onClick={() => router.push(`/quiz/${quiz.id}`)}
                 >
-                  <CardContent sx={{ p: 3 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
-                      <Box
-                        sx={{
-                          width: 48,
-                          height: 48,
-                          borderRadius: 2,
-                          background: 'linear-gradient(135deg, hsl(142, 76%, 36%), hsl(142, 76%, 56%))',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          mr: 2,
-                        }}
-                      >
-                        <PlayCircle sx={{ fontSize: 24, color: 'hsl(220, 26%, 6%)' }} />
-                      </Box>
-                      <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                          {quiz.name}
-                        </Typography>
-                        {quiz.difficulty && (
-                          <Chip
-                            label={quiz.difficulty}
-                            size="small"
-                            color={(() => {
-                              if (quiz.difficulty === 'Easy') {
-                                return 'success';
-                              }
+                  <Quiz sx={{ fontSize: 32, color: 'hsl(220, 26%, 6%)' }} />
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 1 }}>
+                    {categoryName} Quiz
+                  </Typography>
+                  <Typography color="text.secondary">
+                    24 questions • 45 seconds per question
+                  </Typography>
+                </Box>
+              </Box>
 
-                              if (quiz.difficulty === 'Medium') {
-                                return 'warning';
-                              }
+              <Box sx={{ mb: 3 }}>
+                <Chip label={`${questionCount} questions available`} color="primary" sx={{ mr: 1 }} />
+                <Chip label="Standard" />
+              </Box>
 
-                              return 'error';
-                            })()}
-                          />
-                        )}
-                      </Box>
-                    </Box>
-
-                    {quiz.description && (
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        {quiz.description}
-                      </Typography>
-                    )}
-
-                    <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                      <Chip label={`${quiz.question_count} Questions`} size="small" variant="outlined" />
-                      <Chip label="45s per question" size="small" variant="outlined" />
-                    </Box>
-
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      startIcon={<PlayCircle />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        router.push(`/quiz/${quiz.id}`);
-                      }}
-                    >
-                      Start Quiz
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+              <Button
+                variant="contained"
+                size="large"
+                fullWidth
+                startIcon={<PlayCircle />}
+                onClick={handleStartQuiz}
+              >
+                Start Quiz
+              </Button>
+            </CardContent>
+          </Card>
         )}
       </Container>
     </Layout>
