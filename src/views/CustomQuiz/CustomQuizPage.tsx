@@ -29,17 +29,6 @@ interface Category {
   name: string;
 }
 
-interface QuizInsert {
-  name: string;
-  category_id: string;
-  question_count: number;
-  is_custom: boolean;
-}
-
-interface QuizResponse {
-  id: string;
-}
-
 const CustomQuizPage = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);

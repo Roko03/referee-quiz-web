@@ -1,1 +1,3 @@
-export { default } from './CustomQuizSessionPage';
+import CustomQuizSessionPage from './CustomQuizSessionPage';
+
+export default CustomQuizSessionPage;
