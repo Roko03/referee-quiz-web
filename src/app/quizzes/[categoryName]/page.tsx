@@ -1,23 +1,16 @@
-import React from 'react';
+import QuizListingPage from '@/views/QuizListing';
 
-import ComingSoon from '@/components/ComingSoon';
-
-interface QuizListingPageProps {
+interface QuizListingRouteProps {
   params: Promise<{
     categoryName: string;
   }>;
 }
 
-const QuizListingPage = async ({ params }: QuizListingPageProps) => {
+const QuizListingRoute = async ({ params }: QuizListingRouteProps) => {
   const { categoryName } = await params;
   const decodedName = decodeURIComponent(categoryName);
 
-  return (
-    <ComingSoon
-      title={`${decodedName} Quizzes`}
-      description="Browse and start quizzes from this category. This page is currently under construction."
-    />
-  );
+  return <QuizListingPage categoryName={decodedName} />;
 };
 
-export default QuizListingPage;
+export default QuizListingRoute;
