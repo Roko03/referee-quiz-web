@@ -28,6 +28,13 @@ interface ProfileData {
   avatar_url: string | null;
 }
 
+interface ProfileUpdate {
+  username: string;
+  first_name: string;
+  last_name: string;
+  avatar_url: string | null;
+}
+
 interface ProfileFormData {
   username: string;
   firstName: string;
@@ -85,14 +92,16 @@ const ProfileEditPage = () => {
     setSaving(true);
     setError(null);
 
+    const updateData: ProfileUpdate = {
+      username: formData.username,
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      avatar_url: formData.avatarUrl || null,
+    };
+
     const { error: updateError } = await supabase
       .from('profiles')
-      .update({
-        username: formData.username,
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        avatar_url: formData.avatarUrl || null,
-      })
+      .update(updateData as never)
       .eq('id', user?.id);
 
     if (updateError) {
