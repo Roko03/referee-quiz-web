@@ -16,11 +16,15 @@ interface PrivacyContentProps {
 }
 
 const PrivacyContent = ({ frontmatter, content }: PrivacyContentProps) => {
-  const lastUpdated = frontmatter.lastUpdated
-    ? typeof frontmatter.lastUpdated === 'string'
-      ? frontmatter.lastUpdated
-      : frontmatter.lastUpdated.toLocaleDateString()
-    : null;
+  let lastUpdated: string | null = null;
+
+  if (frontmatter.lastUpdated) {
+    if (typeof frontmatter.lastUpdated === 'string') {
+      lastUpdated = frontmatter.lastUpdated;
+    } else {
+      lastUpdated = frontmatter.lastUpdated.toLocaleDateString();
+    }
+  }
 
   return (
     <Layout>
