@@ -117,13 +117,13 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
           started_at: new Date().toISOString(),
         };
 
-        const { data } = await supabase
+        const { data: sessionResponse } = await supabase
           .from('quiz_sessions')
           .insert(sessionData as never)
           .select('id')
           .single();
 
-        const session = data as SessionResponse | null;
+        const session = sessionResponse as SessionResponse | null;
 
         if (session) {
           setSessionId(session.id);
