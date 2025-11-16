@@ -7,6 +7,10 @@ import { useAuthStore } from '@/valtio/auth';
 
 export type UserRole = 'admin' | 'manager' | 'user';
 
+interface UserRoleData {
+  role: UserRole;
+}
+
 export const useUserRole = () => {
   const { user } = useAuthStore();
   const [role, setRole] = useState<UserRole | null>(null);
@@ -21,10 +25,14 @@ export const useUserRole = () => {
         return;
       }
 
-      const { data, error } = await supabase.from('user_roles').select('role').eq('user_id', user.id).single();
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .single<UserRoleData>();
 
       if (!error && data) {
-        setRole(data.role as UserRole);
+        setRole(data.role);
       } else {
         setRole('user');
       }
