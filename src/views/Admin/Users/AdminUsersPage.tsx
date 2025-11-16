@@ -67,6 +67,10 @@ type UserRoleInsert = {
   role: string;
 };
 
+type UserFormData = Partial<User> & {
+  role?: string;
+};
+
 const AdminUsersPage = () => {
   const { user, loading: authLoading } = useAuthStore();
   const router = useRouter();
@@ -175,7 +179,7 @@ const AdminUsersPage = () => {
     setShowDeleteDialog(true);
   };
 
-  const handleSaveUser = async (userData: Partial<User>) => {
+  const handleSaveUser = async (userData: UserFormData) => {
     if (modalMode === 'edit' && selectedUser) {
       // Update user profile
       const profileUpdate: ProfileUpdate = {
