@@ -48,6 +48,10 @@ interface QuizSessionInsert {
   started_at: string;
 }
 
+interface SessionResponse {
+  id: string;
+}
+
 interface QuizSessionUpdate {
   completed_at: string;
   correct_count: number;
@@ -113,11 +117,13 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
           started_at: new Date().toISOString(),
         };
 
-        const { data: session } = await supabase
+        const { data } = await supabase
           .from('quiz_sessions')
           .insert(sessionData as never)
           .select('id')
           .single();
+
+        const session = data as SessionResponse | null;
 
         if (session) {
           setSessionId(session.id);
