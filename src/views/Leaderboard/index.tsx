@@ -17,6 +17,17 @@ interface LeaderboardEntry {
   passRate: number;
 }
 
+interface QuizSessionData {
+  user_id: string | null;
+  correct_count: number;
+  total_questions: number;
+  passed: boolean;
+}
+
+interface ProfileData {
+  username: string;
+}
+
 const LeaderboardPage = () => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
@@ -33,7 +44,8 @@ const LeaderboardPage = () => {
         `,
         )
         .eq('total_questions', 24)
-        .not('user_id', 'is', null);
+        .not('user_id', 'is', null)
+        .returns<QuizSessionData[]>();
 
       if (sessions) {
         const userStats = new Map<
@@ -64,7 +76,11 @@ const LeaderboardPage = () => {
 
         const leaderboardData = await Promise.all(
           Array.from(userStats.entries()).map(async ([userId, stats]) => {
-            const { data: profile } = await supabase.from('profiles').select('username').eq('id', userId).single();
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('username')
+              .eq('id', userId)
+              .single<ProfileData>();
 
             return {
               username: profile?.username || 'Anonymous',
