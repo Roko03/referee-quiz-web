@@ -55,8 +55,10 @@ const QuizHistoryPage = () => {
         .not('completed_at', 'is', null)
         .order('completed_at', { ascending: false });
 
-      if (data) {
-        setSessions(data);
+      const sessions = data as QuizSession[] | null;
+
+      if (sessions) {
+        setSessions(sessions);
       }
 
       setLoading(false);

@@ -72,10 +72,12 @@ const QuizReviewPage = ({ sessionId }: QuizReviewPageProps) => {
         return;
       }
 
-      const { data: answersData } = await supabase
+      const { data } = await supabase
         .from('user_answers')
         .select('question_id, answer_id, time_taken')
         .eq('session_id', sessionId);
+
+      const answersData = data as UserAnswer[] | null;
 
       const questionIds = answersData?.map((a) => a.question_id) || [];
       const { data: questionsData } = await supabase
