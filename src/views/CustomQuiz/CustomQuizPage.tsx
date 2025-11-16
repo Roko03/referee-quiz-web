@@ -34,6 +34,10 @@ interface QuizInsert {
   is_custom: boolean;
 }
 
+interface QuizResponse {
+  id: string;
+}
+
 const CustomQuizPage = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -69,11 +73,13 @@ const CustomQuizPage = () => {
     };
 
     // Type assertion needed due to overly strict Supabase generated types
-    const { data: quiz } = await supabase
+    const { data } = await supabase
       .from('quizzes')
       .insert(quizData as never)
       .select('id')
       .single();
+
+    const quiz = data as QuizResponse | null;
 
     if (quiz) {
       router.push(`/quiz/${quiz.id}`);
