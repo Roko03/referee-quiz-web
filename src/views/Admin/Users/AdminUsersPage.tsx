@@ -33,7 +33,10 @@ import {
 import Layout from '@/components/Layout';
 import { useAuthStore } from '@/valtio/auth';
 import { supabase } from '@/lib/supabase/client';
-import { UserModal, DeleteUserDialog } from './UserModals';
+import ViewUserModal from './partials/ViewUserModal';
+import EditUserModal from './partials/EditUserModal';
+import CreateUserModal from './partials/CreateUserModal';
+import DeleteUserModal from './partials/DeleteUserModal';
 
 interface UserRole {
   role: string;
@@ -350,15 +353,32 @@ const AdminUsersPage = () => {
         </Box>
       </Container>
 
-      <UserModal
-        open={showModal}
-        user={selectedUser}
-        mode={modalMode}
-        onClose={() => setShowModal(false)}
-        onSave={handleSaveUser}
-      />
+      {modalMode === 'view' && (
+        <ViewUserModal
+          open={showModal}
+          user={selectedUser}
+          onClose={() => setShowModal(false)}
+        />
+      )}
 
-      <DeleteUserDialog
+      {modalMode === 'edit' && (
+        <EditUserModal
+          open={showModal}
+          user={selectedUser}
+          onClose={() => setShowModal(false)}
+          onSave={handleSaveUser}
+        />
+      )}
+
+      {modalMode === 'add' && (
+        <CreateUserModal
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          onSave={handleSaveUser}
+        />
+      )}
+
+      <DeleteUserModal
         open={showDeleteDialog}
         user={selectedUser}
         onClose={() => setShowDeleteDialog(false)}

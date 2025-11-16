@@ -34,7 +34,10 @@ import {
 import Layout from '@/components/Layout';
 import { useAuthStore } from '@/valtio/auth';
 import { supabase } from '@/lib/supabase/client';
-import { QuestionModal, DeleteQuestionDialog } from './QuestionModals';
+import ViewQuestionModal from './partials/ViewQuestionModal';
+import EditQuestionModal from './partials/EditQuestionModal';
+import CreateQuestionModal from './partials/CreateQuestionModal';
+import DeleteQuestionModal from './partials/DeleteQuestionModal';
 
 interface Answer {
   id: string;
@@ -377,16 +380,35 @@ const AdminQuestionsPage = () => {
         </Box>
       </Container>
 
-      <QuestionModal
-        open={showModal}
-        question={selectedQuestion}
-        categories={categories}
-        mode={modalMode}
-        onClose={() => setShowModal(false)}
-        onSave={handleSaveQuestion}
-      />
+      {modalMode === 'view' && (
+        <ViewQuestionModal
+          open={showModal}
+          question={selectedQuestion}
+          categories={categories}
+          onClose={() => setShowModal(false)}
+        />
+      )}
 
-      <DeleteQuestionDialog
+      {modalMode === 'edit' && (
+        <EditQuestionModal
+          open={showModal}
+          question={selectedQuestion}
+          categories={categories}
+          onClose={() => setShowModal(false)}
+          onSave={handleSaveQuestion}
+        />
+      )}
+
+      {modalMode === 'add' && (
+        <CreateQuestionModal
+          open={showModal}
+          categories={categories}
+          onClose={() => setShowModal(false)}
+          onSave={handleSaveQuestion}
+        />
+      )}
+
+      <DeleteQuestionModal
         open={showDeleteDialog}
         question={selectedQuestion}
         onClose={() => setShowDeleteDialog(false)}
