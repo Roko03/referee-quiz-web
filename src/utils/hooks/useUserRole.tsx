@@ -28,6 +28,7 @@ export const useUserRole = () => {
       } else {
         setRole('user');
       }
+
       setLoading(false);
     };
 

@@ -29,8 +29,7 @@ import {
   Quiz,
 } from '@mui/icons-material';
 
-import { useAuthStore } from '@/valtio/auth';
-import { signOut } from '@/valtio/auth';
+import { useAuthStore, signOut } from '@/valtio/auth';
 import { useUserRole } from '@/utils/hooks/useUserRole';
 
 const Navigation = () => {

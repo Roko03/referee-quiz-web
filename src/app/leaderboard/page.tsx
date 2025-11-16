@@ -81,12 +81,17 @@ const LeaderboardPage = () => {
   }, []);
 
   const getMedalIcon = (index: number) => {
-    if (index === 0)
+    if (index === 0) {
       return <Trophy sx={{ fontSize: 24, color: 'hsl(38, 92%, 50%)' }} />;
-    if (index === 1)
+    }
+
+    if (index === 1) {
       return <EmojiEvents sx={{ fontSize: 24, color: 'text.secondary' }} />;
-    if (index === 2)
+    }
+
+    if (index === 2) {
       return <WorkspacePremium sx={{ fontSize: 24, color: 'hsl(38, 92%, 50%)', opacity: 0.7 }} />;
+    }
 
     return (
       <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.secondary' }}>

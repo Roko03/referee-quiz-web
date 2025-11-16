@@ -22,8 +22,7 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-import { useAuthStore } from '@/valtio/auth';
-import { signIn, signUp, signInWithGoogle } from '@/valtio/auth';
+import { useAuthStore, signIn, signUp, signInWithGoogle } from '@/valtio/auth';
 
 interface TabPanelProps {
   children?: React.ReactNode;

@@ -24,8 +24,10 @@ const HomePage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       const { data } = await supabase.from('question_categories').select('*').order('name');
+
       if (data) setCategories(data);
     };
+
     fetchCategories();
   }, []);
 
