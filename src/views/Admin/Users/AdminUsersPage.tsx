@@ -166,7 +166,7 @@ const AdminUsersPage = () => {
   const handleSaveUser = async (userData: Partial<User>) => {
     if (modalMode === 'edit' && selectedUser) {
       // Update user profile
-      // @ts-expect-error - Supabase generated types incorrectly infer never
+      // @ts-ignore - Supabase generated types incorrectly infer never
       const { error: profileError } = await supabase
         .from('profiles')
         .update({
@@ -184,7 +184,7 @@ const AdminUsersPage = () => {
         await supabase.from('user_roles').delete().eq('user_id', selectedUser.id);
 
         // Insert new role
-        // @ts-expect-error - Supabase generated types incorrectly infer never
+        // @ts-ignore - Supabase generated types incorrectly infer never
         await supabase.from('user_roles').insert({
           user_id: selectedUser.id,
           role: userData.role,

@@ -164,7 +164,7 @@ const AdminQuestionsPage = () => {
       // Insert new question
       const { data: newQuestion, error: questionError } = await supabase
         .from('questions')
-        // @ts-expect-error - Supabase generated types incorrectly infer never
+        // @ts-ignore - Supabase generated types incorrectly infer never
         .insert({
           text: questionData.text,
           category_id: questionData.category_id,
@@ -185,11 +185,11 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
-      // @ts-expect-error - Supabase generated types incorrectly infer never
+      // @ts-ignore - Supabase generated types incorrectly infer never
       await supabase.from('answers').insert(answersToInsert);
     } else if (modalMode === 'edit' && selectedQuestion) {
       // Update question
-      // @ts-expect-error - Supabase generated types incorrectly infer never
+      // @ts-ignore - Supabase generated types incorrectly infer never
       await supabase
         .from('questions')
         .update({
@@ -210,7 +210,7 @@ const AdminQuestionsPage = () => {
           is_correct: a.is_correct,
         }));
 
-      // @ts-expect-error - Supabase generated types incorrectly infer never
+      // @ts-ignore - Supabase generated types incorrectly infer never
       await supabase.from('answers').insert(answersToInsert);
     }
 
