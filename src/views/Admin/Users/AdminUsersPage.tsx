@@ -186,7 +186,7 @@ const AdminUsersPage = () => {
 
       const { error: profileError } = await supabase
         .from('profiles')
-        .update(profileUpdate as any) // eslint-disable-line @typescript-eslint/no-explicit-any
+        .update(profileUpdate as unknown as never)
         .eq('id', selectedUser.id);
 
       if (profileError) throw profileError;
@@ -202,7 +202,7 @@ const AdminUsersPage = () => {
           role: userData.role,
         };
 
-        await supabase.from('user_roles').insert(roleInsert as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+        await supabase.from('user_roles').insert(roleInsert as unknown as never);
       }
     }
 
