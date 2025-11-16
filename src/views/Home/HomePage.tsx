@@ -23,9 +23,9 @@ const HomePage = () => {
     const fetchCategories = async () => {
       const { data } = await supabase.from('question_categories').select('*').order('name');
 
-      const categories = data as Category[] | null;
+      const categoriesData = data as Category[] | null;
 
-      if (categories) setCategories(categories);
+      if (categoriesData) setCategories(categoriesData);
     };
 
     fetchCategories();

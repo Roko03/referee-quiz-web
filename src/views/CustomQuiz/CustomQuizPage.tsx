@@ -50,10 +50,10 @@ const CustomQuizPage = () => {
     const fetchCategories = async () => {
       const { data } = await supabase.from('question_categories').select('id, name').order('name');
 
-      const categories = data as Category[] | null;
+      const categoriesData = data as Category[] | null;
 
-      if (categories) {
-        setCategories(categories);
+      if (categoriesData) {
+        setCategories(categoriesData);
       }
 
       setLoading(false);
