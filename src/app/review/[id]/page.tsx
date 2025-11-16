@@ -1,12 +1,15 @@
-import React from 'react';
+import QuizReviewPage from '@/views/QuizReview';
 
-import ComingSoon from '@/components/ComingSoon';
+interface QuizReviewRouteProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
 
-const QuizReviewPage = () => (
-  <ComingSoon
-    title="Quiz Review"
-    description="Review your quiz results and see correct answers. This feature is coming soon."
-  />
-);
+const QuizReviewRoute = async ({ params }: QuizReviewRouteProps) => {
+  const { id } = await params;
 
-export default QuizReviewPage;
+  return <QuizReviewPage sessionId={id} />;
+};
+
+export default QuizReviewRoute;

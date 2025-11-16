@@ -1,12 +1,15 @@
-import React from 'react';
+import QuizPage from '@/views/Quiz';
 
-import ComingSoon from '@/components/ComingSoon';
+interface ActiveQuizPageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
 
-const ActiveQuizPage = () => (
-  <ComingSoon
-    title="Quiz Session"
-    description="Answer questions and test your knowledge. Quiz functionality is coming soon."
-  />
-);
+const ActiveQuizPage = async ({ params }: ActiveQuizPageProps) => {
+  const { id } = await params;
+
+  return <QuizPage quizId={id} />;
+};
 
 export default ActiveQuizPage;

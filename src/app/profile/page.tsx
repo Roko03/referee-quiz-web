@@ -1,7 +1,3 @@
-import { redirect } from 'next/navigation';
-
-const ProfilePage = () => {
-  redirect('/profile/edit');
-};
+import ProfilePage from '@/views/Profile';
 
 export default ProfilePage;
