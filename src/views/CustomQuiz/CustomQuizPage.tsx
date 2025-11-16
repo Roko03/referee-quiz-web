@@ -93,7 +93,7 @@ const CustomQuizPage = () => {
   };
 
   const handleCategoryChange = (event: SelectChangeEvent<string[]>) => {
-    const value = event.target.value;
+    const { value } = event.target;
 
     setSelectedCategories(typeof value === 'string' ? value.split(',') : value);
   };
