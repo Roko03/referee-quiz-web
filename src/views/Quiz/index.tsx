@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { useRouter } from 'next/navigation';
 import {
@@ -99,7 +99,7 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
     fetchQuiz();
   }, [quizId, router, user]);
 
-  const finishQuiz = async () => {
+  const finishQuiz = useCallback(async () => {
     let correctCount = 0;
 
     questions.forEach((question) => {
@@ -125,9 +125,9 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
       .eq('id', sessionId);
 
     router.push(`/review/${sessionId}`);
-  };
+  }, [questions, userAnswers, sessionId, router]);
 
-  const handleNextQuestion = async () => {
+  const handleNextQuestion = useCallback(async () => {
     const currentQuestion = questions[currentQuestionIndex];
 
     if (selectedAnswerId) {
@@ -151,7 +151,7 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
     } else {
       await finishQuiz();
     }
-  };
+  }, [questions, currentQuestionIndex, selectedAnswerId, sessionId, timeLeft, finishQuiz]);
 
   useEffect(() => {
     if (loading || timeLeft === 0) {
@@ -171,7 +171,7 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, loading, currentQuestionIndex]);
+  }, [timeLeft, loading, currentQuestionIndex, handleNextQuestion]);
 
   if (loading) {
     return (

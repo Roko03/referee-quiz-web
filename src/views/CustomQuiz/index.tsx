@@ -61,7 +61,7 @@ const CustomQuizPage = () => {
         category_id: selectedCategory,
         question_count: questionCount,
         is_custom: true,
-      })
+      } as any)
       .select('id')
       .single();
 
