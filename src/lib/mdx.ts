@@ -11,7 +11,7 @@ export interface StaticContent {
     title: string;
     description?: string;
     lastUpdated?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   content: string;
 }

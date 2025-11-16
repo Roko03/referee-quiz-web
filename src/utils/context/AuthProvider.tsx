@@ -15,7 +15,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     return cleanup;
   }, []);
 
-  return <>{children}</>;
+  return children;
 };
 
 export default AuthProvider;
