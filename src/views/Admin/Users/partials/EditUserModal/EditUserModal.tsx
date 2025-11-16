@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
-  TextField,
   FormControl,
   InputLabel,
   Select,
@@ -11,6 +10,8 @@ import {
   Button,
 } from '@mui/material';
 import ModalRoot from '@/components/ModalRoot';
+import Form from '@/components/Forms/Form';
+import FormInput from '@/components/Forms/FormInput';
 
 interface UserRole {
   role: string;
@@ -34,39 +35,27 @@ interface EditUserModalProps {
   onSave: (userData: Partial<User>) => Promise<void>;
 }
 
+interface FormData {
+  username: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  role: string;
+}
+
 const EditUserModal: React.FC<EditUserModalProps> = ({
   open,
   user,
   onClose,
   onSave,
 }) => {
-  const [formData, setFormData] = useState({
-    username: user?.username || '',
-    first_name: user?.first_name || '',
-    last_name: user?.last_name || '',
-    phone: user?.phone || '',
-    role: user?.user_roles[0]?.role || 'user',
-  });
-
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        username: user.username || '',
-        first_name: user.first_name || '',
-        last_name: user.last_name || '',
-        phone: user.phone || '',
-        role: user.user_roles[0]?.role || 'user',
-      });
-    }
-  }, [user, open]);
-
-  const handleSave = async () => {
+  const handleSubmit = async (data: FormData) => {
     setSaving(true);
 
     try {
-      await onSave(formData);
+      await onSave(data);
       onClose();
     } catch (error) {
       if (error instanceof Error) {
@@ -86,56 +75,68 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
       title="Edit User"
       maxWidth="sm"
       fullWidth
-      actions={
-        <>
-          <Button onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} variant="contained" disabled={saving || !formData.username}>
-            {saving ? 'Saving...' : 'Save'}
-          </Button>
-        </>
-      }
     >
-      <Box sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <TextField
-          label="Username"
-          value={formData.username}
-          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-          disabled
-          fullWidth
-          required
-        />
-        <TextField
-          label="First Name"
-          value={formData.first_name}
-          onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-          fullWidth
-        />
-        <TextField
-          label="Last Name"
-          value={formData.last_name}
-          onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-          fullWidth
-        />
-        <TextField
-          label="Phone"
-          value={formData.phone}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          fullWidth
-        />
-        <FormControl fullWidth>
-          <InputLabel>Role</InputLabel>
-          <Select
-            value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-            label="Role"
-          >
-            <MenuItem value="user">User</MenuItem>
-            <MenuItem value="admin">Admin</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+      <Form<FormData>
+        onSubmit={handleSubmit}
+        defaultValues={{
+          username: user.username || '',
+          first_name: user.first_name || '',
+          last_name: user.last_name || '',
+          phone: user.phone || '',
+          role: user.user_roles[0]?.role || 'user',
+        }}
+      >
+        {({ formState: { isValid } }) => (
+          <Box sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <FormInput
+              name="username"
+              label="Username"
+              fullWidth
+              disabled
+              validate={{
+                required: 'Username is required',
+              }}
+            />
+            <FormInput
+              name="first_name"
+              label="First Name"
+              fullWidth
+            />
+            <FormInput
+              name="last_name"
+              label="Last Name"
+              fullWidth
+            />
+            <FormInput
+              name="phone"
+              label="Phone"
+              fullWidth
+            />
+            <FormInput
+              name="role"
+              label="Role"
+              renderInput={({ field }) => (
+                <FormControl fullWidth>
+                  <InputLabel>Role</InputLabel>
+                  <Select {...field} label="Role">
+                    <MenuItem value="user">User</MenuItem>
+                    <MenuItem value="admin">Admin</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
+
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 2 }}>
+              <Button onClick={onClose}>
+                Cancel
+              </Button>
+              <Button type="submit" variant="contained" disabled={saving || !isValid}>
+                {saving ? 'Saving...' : 'Save'}
+              </Button>
+            </Box>
+          </Box>
+        )}
+      </Form>
     </ModalRoot>
   );
 };

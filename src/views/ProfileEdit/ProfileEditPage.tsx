@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-
 import { useRouter } from 'next/navigation';
 import {
   Box,
@@ -9,17 +8,17 @@ import {
   Typography,
   Card,
   CardContent,
-  TextField,
   Button,
   Avatar,
   Alert,
   Snackbar,
 } from '@mui/material';
 import { Save, ArrowBack } from '@mui/icons-material';
-
 import Layout from '@/components/Layout';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/valtio/auth';
+import Form from '@/components/Forms/Form';
+import FormInput from '@/components/Forms/FormInput';
 
 interface ProfileData {
   username: string;
@@ -45,12 +44,7 @@ interface ProfileFormData {
 const ProfileEditPage = () => {
   const router = useRouter();
   const { user } = useAuthStore();
-  const [formData, setFormData] = useState<ProfileFormData>({
-    username: '',
-    firstName: '',
-    lastName: '',
-    avatarUrl: '',
-  });
+  const [profileData, setProfileData] = useState<ProfileFormData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,20 +58,20 @@ const ProfileEditPage = () => {
     }
 
     const fetchProfile = async () => {
-      const { data: profileData } = await supabase
+      const { data } = await supabase
         .from('profiles')
         .select('username, first_name, last_name, avatar_url')
         .eq('id', user.id)
         .single();
 
-      const data = profileData as ProfileData | null;
+      const profile = data as ProfileData | null;
 
-      if (data) {
-        setFormData({
-          username: data.username || '',
-          firstName: data.first_name || '',
-          lastName: data.last_name || '',
-          avatarUrl: data.avatar_url || '',
+      if (profile) {
+        setProfileData({
+          username: profile.username || '',
+          firstName: profile.first_name || '',
+          lastName: profile.last_name || '',
+          avatarUrl: profile.avatar_url || '',
         });
       }
 
@@ -87,9 +81,7 @@ const ProfileEditPage = () => {
     fetchProfile();
   }, [user, router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = async (formData: ProfileFormData) => {
     if (!user) return;
 
     setSaving(true);
@@ -117,7 +109,7 @@ const ProfileEditPage = () => {
     setSaving(false);
   };
 
-  if (loading) {
+  if (loading || !profileData) {
     return (
       <Layout>
         <Container maxWidth="sm" sx={{ py: 6 }}>
@@ -127,9 +119,9 @@ const ProfileEditPage = () => {
     );
   }
 
-  const initials = formData.firstName && formData.lastName
-    ? `${formData.firstName[0]}${formData.lastName[0]}`.toUpperCase()
-    : formData.username.substring(0, 2).toUpperCase();
+  const initials = profileData.firstName && profileData.lastName
+    ? `${profileData.firstName[0]}${profileData.lastName[0]}`.toUpperCase()
+    : profileData.username.substring(0, 2).toUpperCase();
 
   return (
     <Layout>
@@ -148,69 +140,87 @@ const ProfileEditPage = () => {
 
         <Card>
           <CardContent sx={{ p: 4 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
-              <Avatar
-                src={formData.avatarUrl || undefined}
-                sx={{
-                  width: 120,
-                  height: 120,
-                  fontSize: '2.5rem',
-                  background: 'linear-gradient(135deg, hsl(142, 76%, 36%), hsl(142, 76%, 56%))',
-                  color: 'hsl(220, 26%, 6%)',
-                  mb: 2,
-                }}
-              >
-                {initials}
-              </Avatar>
-              <Typography variant="caption" color="text.secondary">
-                Avatar URL updated below
-              </Typography>
-            </Box>
+            <Form<ProfileFormData>
+              onSubmit={handleSubmit}
+              defaultValues={profileData}
+            >
+              {({ watch }) => {
+                const avatarUrl = watch('avatarUrl');
+                const firstName = watch('firstName');
+                const lastName = watch('lastName');
+                const username = watch('username');
 
-            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-              <TextField
-                fullWidth
-                label="Username"
-                value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                required
-                helperText="Your unique username"
-              />
+                const currentInitials = firstName && lastName
+                  ? `${firstName[0]}${lastName[0]}`.toUpperCase()
+                  : username.substring(0, 2).toUpperCase();
 
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <TextField
-                  fullWidth
-                  label="First Name"
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                />
-                <TextField
-                  fullWidth
-                  label="Last Name"
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                />
-              </Box>
+                return (
+                  <>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
+                      <Avatar
+                        src={avatarUrl || undefined}
+                        sx={{
+                          width: 120,
+                          height: 120,
+                          fontSize: '2.5rem',
+                          background: 'linear-gradient(135deg, hsl(142, 76%, 36%), hsl(142, 76%, 56%))',
+                          color: 'hsl(220, 26%, 6%)',
+                          mb: 2,
+                        }}
+                      >
+                        {currentInitials}
+                      </Avatar>
+                      <Typography variant="caption" color="text.secondary">
+                        Avatar URL updated below
+                      </Typography>
+                    </Box>
 
-              <TextField
-                fullWidth
-                label="Avatar URL"
-                value={formData.avatarUrl}
-                onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })}
-                helperText="URL to your profile picture"
-              />
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                      <FormInput
+                        name="username"
+                        label="Username"
+                        fullWidth
+                        helperText="Your unique username"
+                        validate={{
+                          required: 'Username is required',
+                        }}
+                      />
 
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                fullWidth
-                disabled={saving}
-                startIcon={<Save />}
-              >
-                {saving ? 'Saving...' : 'Save Changes'}
-              </Button>
-            </Box>
+                      <Box sx={{ display: 'flex', gap: 2 }}>
+                        <FormInput
+                          name="firstName"
+                          label="First Name"
+                          fullWidth
+                        />
+                        <FormInput
+                          name="lastName"
+                          label="Last Name"
+                          fullWidth
+                        />
+                      </Box>
+
+                      <FormInput
+                        name="avatarUrl"
+                        label="Avatar URL"
+                        fullWidth
+                        helperText="URL to your profile picture"
+                      />
+
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        size="large"
+                        fullWidth
+                        disabled={saving}
+                        startIcon={<Save />}
+                      >
+                        {saving ? 'Saving...' : 'Save Changes'}
+                      </Button>
+                    </Box>
+                  </>
+                );
+              }}
+            </Form>
           </CardContent>
         </Card>
 
