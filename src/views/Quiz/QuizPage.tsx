@@ -137,6 +137,8 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
   }, [quizId, router, user]);
 
   const finishQuiz = useCallback(async () => {
+    if (!sessionId) return;
+
     let correctCount = 0;
 
     questions.forEach((question) => {
