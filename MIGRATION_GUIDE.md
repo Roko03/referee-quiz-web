@@ -75,15 +75,15 @@ All pages from `src/pages/` in Lovable project need migration to Next.js App Rou
 | Privacy.tsx | `/privacy` | ✅ Complete | MDX page |
 | Terms.tsx | `/terms` | ✅ Complete | MDX page |
 | NotFound.tsx | `/not-found` | ✅ Complete | Enhanced 404 page |
-| Auth.tsx | `/auth` | ⏳ Pending | Sign up / Sign in page |
-| QuizListing.tsx | `/quizzes/[categoryName]` | ⏳ Pending | Dynamic route |
-| CustomQuiz.tsx | `/quizzes/custom` | ⏳ Pending | Custom quiz builder |
-| ActiveQuiz.tsx | `/quiz/[id]` | ⏳ Pending | Active quiz session |
-| QuizReview.tsx | `/review/[id]` | ⏳ Pending | Quiz results review |
-| QuizHistory.tsx | `/profile/history` | ⏳ Pending | User quiz history |
-| ProfileEdit.tsx | `/profile/edit` | ⏳ Pending | Edit user profile |
-| AdminUsers.tsx | `/admin/users` | ⏳ Pending | Admin: User management |
-| AdminQuestions.tsx | `/admin/questions` | ⏳ Pending | Admin: Question management |
+| Auth.tsx | `/auth` | ✅ Complete | Sign up / Sign in with Google |
+| QuizListing.tsx | `/quizzes/[categoryName]` | 🚧 Stub | Dynamic route - Coming Soon |
+| CustomQuiz.tsx | `/quizzes/custom` | 🚧 Stub | Custom quiz builder - Coming Soon |
+| ActiveQuiz.tsx | `/quiz/[id]` | 🚧 Stub | Active quiz session - Coming Soon |
+| QuizReview.tsx | `/review/[id]` | 🚧 Stub | Quiz results review - Coming Soon |
+| QuizHistory.tsx | `/profile/history` | 🚧 Stub | User quiz history - Coming Soon |
+| ProfileEdit.tsx | `/profile/edit` | 🚧 Stub | Edit user profile - Coming Soon |
+| AdminUsers.tsx | `/admin/users` | 🚧 Stub | Admin: User management - Coming Soon |
+| AdminQuestions.tsx | `/admin/questions` | 🚧 Stub | Admin: Question management - Coming Soon |
 
 ---
 
@@ -279,4 +279,4 @@ From Lovable project (`/tmp/lovable-code/rules-referee-rhythm-main/`):
 ---
 
 **Last Updated**: 2025-11-16
-**Migration Progress**: ~55% (Infrastructure + 5 pages complete, 9 complex pages pending)
+**Migration Progress**: ~70% (Infrastructure + 6 pages complete, 8 stub pages functional, navigation works)
