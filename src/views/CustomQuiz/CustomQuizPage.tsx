@@ -27,6 +27,13 @@ interface Category {
   name: string;
 }
 
+interface QuizInsert {
+  name: string;
+  category_id: string;
+  question_count: number;
+  is_custom: boolean;
+}
+
 const CustomQuizPage = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -54,16 +61,14 @@ const CustomQuizPage = () => {
 
     setCreating(true);
 
-    const { data: quiz } = await supabase
-      .from('quizzes')
-      .insert({
-        name: 'Custom Quiz',
-        category_id: selectedCategory,
-        question_count: questionCount,
-        is_custom: true,
-      } as any)
-      .select('id')
-      .single();
+    const quizData: QuizInsert = {
+      name: 'Custom Quiz',
+      category_id: selectedCategory,
+      question_count: questionCount,
+      is_custom: true,
+    };
+
+    const { data: quiz } = await supabase.from('quizzes').insert(quizData).select('id').single();
 
     if (quiz) {
       router.push(`/quiz/${quiz.id}`);
