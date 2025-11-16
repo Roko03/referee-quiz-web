@@ -36,6 +36,11 @@ interface UserRole {
   role: string;
 }
 
+interface UserRoleData {
+  user_id: string;
+  role: string;
+}
+
 interface User {
   id: string;
   first_name: string | null;
@@ -73,10 +78,12 @@ const AdminUsersPage = () => {
 
     if (profiles) {
       const userIds = profiles.map((u) => u.id);
-      const { data: rolesData } = await supabase
+      const { data } = await supabase
         .from('user_roles')
         .select('user_id, role')
         .in('user_id', userIds);
+
+      const rolesData = data as UserRoleData[] | null;
 
       const usersWithRoles = profiles.map((profile) => ({
         ...profile,
