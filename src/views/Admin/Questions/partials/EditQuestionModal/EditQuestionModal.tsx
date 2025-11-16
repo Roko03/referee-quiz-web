@@ -74,6 +74,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
   useEffect(() => {
     if (question) {
       const timestamp = Date.now();
+
       setFormData({
         text: question.text,
         category_id: question.category_id,

@@ -64,6 +64,7 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
     if (open) {
       // Reset form when modal opens
       const timestamp = Date.now();
+
       setFormData({
         text: '',
         category_id: '',
