@@ -69,25 +69,11 @@ const CustomQuizPage = () => {
 
     setCreating(true);
 
-    const quizData: QuizInsert = {
-      name: 'Custom Quiz',
-      category_id: selectedCategories[0], // Use first category for backward compatibility
-      question_count: questionCount,
-      is_custom: true,
-    };
+    // For custom quizzes, we'll pass parameters via URL instead of creating a quiz record
+    // Since there's no 'quizzes' table, we navigate directly to quiz with category params
+    const categoryIdsParam = selectedCategories.join(',');
 
-    // Type assertion needed due to overly strict Supabase generated types
-    const { data } = await supabase
-      .from('quizzes')
-      .insert(quizData as unknown as never)
-      .select('id')
-      .single();
-
-    const quiz = data as QuizResponse | null;
-
-    if (quiz) {
-      router.push(`/quiz/${quiz.id}`);
-    }
+    router.push(`/quiz/custom?categories=${categoryIdsParam}&count=${questionCount}`);
 
     setCreating(false);
   };
