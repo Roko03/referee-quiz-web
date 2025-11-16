@@ -156,8 +156,13 @@ const QuizListingPage = ({ categoryName }: QuizListingPageProps) => {
                             label={quiz.difficulty}
                             size="small"
                             color={(() => {
-                              if (quiz.difficulty === 'Easy') return 'success';
-                              if (quiz.difficulty === 'Medium') return 'warning';
+                              if (quiz.difficulty === 'Easy') {
+                                return 'success';
+                              }
+
+                              if (quiz.difficulty === 'Medium') {
+                                return 'warning';
+                              }
 
                               return 'error';
                             })()}

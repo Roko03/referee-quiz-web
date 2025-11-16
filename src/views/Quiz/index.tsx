@@ -99,32 +99,6 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
     fetchQuiz();
   }, [quizId, router, user]);
 
-  const handleNextQuestion = async () => {
-    const currentQuestion = questions[currentQuestionIndex];
-
-    if (selectedAnswerId) {
-      setUserAnswers((prev) => ({
-        ...prev,
-        [currentQuestion.id]: selectedAnswerId,
-      }));
-
-      await supabase.from('user_answers').insert({
-        session_id: sessionId,
-        question_id: currentQuestion.id,
-        answer_id: selectedAnswerId,
-        time_taken: QUESTION_TIME_LIMIT - timeLeft,
-      });
-    }
-
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex((prev) => prev + 1);
-      setSelectedAnswerId(null);
-      setTimeLeft(QUESTION_TIME_LIMIT);
-    } else {
-      await finishQuiz();
-    }
-  };
-
   const finishQuiz = async () => {
     let correctCount = 0;
 
@@ -153,6 +127,32 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
     router.push(`/review/${sessionId}`);
   };
 
+  const handleNextQuestion = async () => {
+    const currentQuestion = questions[currentQuestionIndex];
+
+    if (selectedAnswerId) {
+      setUserAnswers((prev) => ({
+        ...prev,
+        [currentQuestion.id]: selectedAnswerId,
+      }));
+
+      await supabase.from('user_answers').insert({
+        session_id: sessionId,
+        question_id: currentQuestion.id,
+        answer_id: selectedAnswerId,
+        time_taken: QUESTION_TIME_LIMIT - timeLeft,
+      });
+    }
+
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+      setSelectedAnswerId(null);
+      setTimeLeft(QUESTION_TIME_LIMIT);
+    } else {
+      await finishQuiz();
+    }
+  };
+
   useEffect(() => {
     if (loading || timeLeft === 0) {
       return undefined;
@@ -171,7 +171,7 @@ const QuizPage = ({ quizId }: QuizPageProps) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, loading, currentQuestionIndex, handleNextQuestion]);
+  }, [timeLeft, loading, currentQuestionIndex]);
 
   if (loading) {
     return (

@@ -138,8 +138,13 @@ const QuizHistoryPage = () => {
                         sx={{
                           fontWeight: 700,
                           color: (() => {
-                            if (session.score >= 90) return 'success.main';
-                            if (session.score >= 70) return 'warning.main';
+                            if (session.score >= 90) {
+                              return 'success.main';
+                            }
+
+                            if (session.score >= 70) {
+                              return 'warning.main';
+                            }
 
                             return 'error.main';
                           })(),

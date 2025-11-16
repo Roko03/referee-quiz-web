@@ -21,7 +21,6 @@ import { PlayCircle, Settings } from '@mui/icons-material';
 
 import Layout from '@/components/Layout';
 import { supabase } from '@/lib/supabase/client';
-import { useAuthStore } from '@/valtio/auth';
 
 interface Category {
   id: string;
