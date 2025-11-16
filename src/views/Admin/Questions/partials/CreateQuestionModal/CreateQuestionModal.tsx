@@ -51,10 +51,10 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
     text: '',
     category_id: '',
     answers: [
-      { text: '', is_correct: true },
-      { text: '', is_correct: false },
-      { text: '', is_correct: false },
-      { text: '', is_correct: false },
+      { id: `temp-${Date.now()}-0`, text: '', is_correct: true },
+      { id: `temp-${Date.now()}-1`, text: '', is_correct: false },
+      { id: `temp-${Date.now()}-2`, text: '', is_correct: false },
+      { id: `temp-${Date.now()}-3`, text: '', is_correct: false },
     ],
   });
 
@@ -63,14 +63,15 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
   useEffect(() => {
     if (open) {
       // Reset form when modal opens
+      const timestamp = Date.now();
       setFormData({
         text: '',
         category_id: '',
         answers: [
-          { text: '', is_correct: true },
-          { text: '', is_correct: false },
-          { text: '', is_correct: false },
-          { text: '', is_correct: false },
+          { id: `temp-${timestamp}-0`, text: '', is_correct: true },
+          { id: `temp-${timestamp}-1`, text: '', is_correct: false },
+          { id: `temp-${timestamp}-2`, text: '', is_correct: false },
+          { id: `temp-${timestamp}-3`, text: '', is_correct: false },
         ],
       });
     }
@@ -112,7 +113,7 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
   const addAnswer = () => {
     setFormData({
       ...formData,
-      answers: [...formData.answers, { text: '', is_correct: false }],
+      answers: [...formData.answers, { id: `temp-${Date.now()}-${Math.random()}`, text: '', is_correct: false }],
     });
   };
 
@@ -193,7 +194,7 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
 
           <RadioGroup value={correctAnswerIndex} onChange={(e) => handleCorrectAnswerChange(Number(e.target.value))}>
             {formData.answers.map((answer, index) => (
-              <Box key={`answer-${index}-${answer.text.substring(0, 10)}`} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+              <Box key={answer.id} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                 <FormControlLabel
                   value={index}
                   control={<Radio />}

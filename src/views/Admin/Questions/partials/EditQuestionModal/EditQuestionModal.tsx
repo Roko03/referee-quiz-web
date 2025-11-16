@@ -62,10 +62,10 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
     text: question?.text || '',
     category_id: question?.category_id || '',
     answers: question?.answers || [
-      { text: '', is_correct: true },
-      { text: '', is_correct: false },
-      { text: '', is_correct: false },
-      { text: '', is_correct: false },
+      { id: `temp-${Date.now()}-0`, text: '', is_correct: true },
+      { id: `temp-${Date.now()}-1`, text: '', is_correct: false },
+      { id: `temp-${Date.now()}-2`, text: '', is_correct: false },
+      { id: `temp-${Date.now()}-3`, text: '', is_correct: false },
     ],
   });
 
@@ -73,14 +73,15 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
 
   useEffect(() => {
     if (question) {
+      const timestamp = Date.now();
       setFormData({
         text: question.text,
         category_id: question.category_id,
         answers: question.answers.length > 0 ? question.answers : [
-          { text: '', is_correct: true },
-          { text: '', is_correct: false },
-          { text: '', is_correct: false },
-          { text: '', is_correct: false },
+          { id: `temp-${timestamp}-0`, text: '', is_correct: true },
+          { id: `temp-${timestamp}-1`, text: '', is_correct: false },
+          { id: `temp-${timestamp}-2`, text: '', is_correct: false },
+          { id: `temp-${timestamp}-3`, text: '', is_correct: false },
         ],
       });
     }
@@ -122,7 +123,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
   const addAnswer = () => {
     setFormData({
       ...formData,
-      answers: [...formData.answers, { text: '', is_correct: false }],
+      answers: [...formData.answers, { id: `temp-${Date.now()}-${Math.random()}`, text: '', is_correct: false }],
     });
   };
 
@@ -205,7 +206,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
 
           <RadioGroup value={correctAnswerIndex} onChange={(e) => handleCorrectAnswerChange(Number(e.target.value))}>
             {formData.answers.map((answer, index) => (
-              <Box key={answer.id || `answer-${index}-${answer.text.substring(0, 10)}`} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+              <Box key={answer.id} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                 <FormControlLabel
                   value={index}
                   control={<Radio />}
