@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run linting
+echo "🔍 Running lint..."
+yarn lint:base || exit 1
+
+# Run type checking (faster than full build)
+echo "🔍 Running type check..."
+yarn type-check || exit 1
+
+echo "✅ Pre-commit checks passed!"

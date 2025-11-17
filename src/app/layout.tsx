@@ -3,6 +3,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 import meta from '@/config/meta';
+import Providers from '@/app/providers';
 import '@/styles/index.scss';
 
 export const metadata: Metadata = {
@@ -79,7 +80,9 @@ interface RootLayoutProps {
 
 const RootLayout = ({ children }: RootLayoutProps) => (
   <html lang="en">
-    <body>{children}</body>
+    <body>
+      <Providers>{children}</Providers>
+    </body>
   </html>
 );
 

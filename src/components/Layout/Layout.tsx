@@ -1,16 +1,24 @@
-import { PropsWithChildren } from 'react';
+'use client';
 
-import Footer from '@/components//Footer';
-import Header from '@/components/Header';
+import React from 'react';
 
-import styles from './Layout.module.scss';
+import { Box } from '@mui/material';
 
-const Layout = ({ children }: PropsWithChildren) => (
-  <>
-    <Header />
-    <main className={styles.main}>{children}</main>
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps) => (
+  <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Navigation />
+    <Box component="main" sx={{ flexGrow: 1, pt: 8 }}>
+      {children}
+    </Box>
     <Footer />
-  </>
+  </Box>
 );
 
 export default Layout;
