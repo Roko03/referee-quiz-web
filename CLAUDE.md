@@ -194,16 +194,19 @@ export default function HomePage() {
 
 ### SCSS Modules
 
-- Every component has its own `.module.scss` file
-- Use CSS Modules for component-scoped styles
+- **Use `.module.scss` only when necessary** - when custom styling cannot be achieved with MUI components
+- Prefer Material-UI `sx` prop and component styling over SCSS modules
+- If all styling can be done via MUI components, `.module.scss` is **optional**
+- When needed: Use CSS Modules for component-scoped styles
 - Import styles: `import styles from './ComponentName.module.scss'`
 - Apply styles: `className={styles.elementName}`
 
-### Material-UI Integration
+### Material-UI Integration (PREFERRED)
 
-- Use Material-UI components for UI primitives
-- Override Material-UI styles using `sx` prop
-- Custom styles go in SCSS modules
+- **Prefer Material-UI components** for all UI primitives
+- Use `sx` prop for component-specific styling
+- Use `styled()` API for reusable styled components
+- Custom SCSS modules only when MUI cannot achieve the desired styling
 - Follow Material-UI v7 patterns
 
 ## Folder Organization Rules
