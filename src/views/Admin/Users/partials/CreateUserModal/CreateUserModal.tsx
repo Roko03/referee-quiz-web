@@ -81,7 +81,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
               label="Username"
               fullWidth
               validate={{
-                required: 'Username is required',
+                required: (value: string) => !!value.trim() || 'Username is required',
               }}
             />
             <FormInput

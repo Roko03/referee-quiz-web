@@ -94,7 +94,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
               fullWidth
               disabled
               validate={{
-                required: 'Username is required',
+                required: (value: string) => !!value.trim() || 'Username is required',
               }}
             />
             <FormInput

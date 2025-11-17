@@ -119,10 +119,6 @@ const ProfileEditPage = () => {
     );
   }
 
-  const initials = profileData.firstName && profileData.lastName
-    ? `${profileData.firstName[0]}${profileData.lastName[0]}`.toUpperCase()
-    : profileData.username.substring(0, 2).toUpperCase();
-
   return (
     <Layout>
       <Container maxWidth="sm" sx={{ py: 6 }}>
@@ -182,7 +178,7 @@ const ProfileEditPage = () => {
                         fullWidth
                         helperText="Your unique username"
                         validate={{
-                          required: 'Username is required',
+                          required: (value: string) => !!value.trim() || 'Username is required',
                         }}
                       />
 

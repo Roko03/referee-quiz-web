@@ -37,7 +37,7 @@ const SignInForm = ({ onSubmit, onGoogleSignIn, loading }: SignInFormProps) => {
           placeholder="your@email.com"
           fullWidth
           validate={{
-            required: 'Email is required',
+            required: (value: string) => !!value.trim() || 'Email is required',
           }}
         />
 
@@ -47,7 +47,7 @@ const SignInForm = ({ onSubmit, onGoogleSignIn, loading }: SignInFormProps) => {
           type={showPassword ? 'text' : 'password'}
           fullWidth
           validate={{
-            required: 'Password is required',
+            required: (value: string) => !!value || 'Password is required',
           }}
           InputProps={{
             endAdornment: (

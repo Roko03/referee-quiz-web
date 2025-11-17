@@ -53,7 +53,7 @@ const SignUpForm = ({ onSubmit, onGoogleSignIn, loading }: SignUpFormProps) => {
                   label="First Name"
                   fullWidth
                   validate={{
-                    required: 'First name is required',
+                    required: (value: string) => !!value.trim() || 'First name is required',
                   }}
                 />
               </Grid>
@@ -63,7 +63,7 @@ const SignUpForm = ({ onSubmit, onGoogleSignIn, loading }: SignUpFormProps) => {
                   label="Last Name"
                   fullWidth
                   validate={{
-                    required: 'Last name is required',
+                    required: (value: string) => !!value.trim() || 'Last name is required',
                   }}
                 />
               </Grid>
@@ -74,7 +74,7 @@ const SignUpForm = ({ onSubmit, onGoogleSignIn, loading }: SignUpFormProps) => {
               label="Username"
               fullWidth
               validate={{
-                required: 'Username is required',
+                required: (value: string) => !!value.trim() || 'Username is required',
               }}
             />
 
@@ -85,7 +85,7 @@ const SignUpForm = ({ onSubmit, onGoogleSignIn, loading }: SignUpFormProps) => {
               placeholder="your@email.com"
               fullWidth
               validate={{
-                required: 'Email is required',
+                required: (value: string) => !!value.trim() || 'Email is required',
               }}
             />
 
@@ -95,7 +95,7 @@ const SignUpForm = ({ onSubmit, onGoogleSignIn, loading }: SignUpFormProps) => {
               type={showPassword ? 'text' : 'password'}
               fullWidth
               validate={{
-                required: 'Password is required',
+                required: (value: string) => !!value || 'Password is required',
                 minLength: (value: string) => value.length >= 6 || 'Password must be at least 6 characters',
               }}
               InputProps={{
@@ -115,7 +115,7 @@ const SignUpForm = ({ onSubmit, onGoogleSignIn, loading }: SignUpFormProps) => {
               type={showConfirmPassword ? 'text' : 'password'}
               fullWidth
               validate={{
-                required: 'Please confirm your password',
+                required: (value: string) => !!value || 'Please confirm your password',
                 matchPassword: (value: string) => value === password || 'Passwords do not match',
               }}
               InputProps={{
